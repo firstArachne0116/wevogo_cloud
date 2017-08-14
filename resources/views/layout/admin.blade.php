@@ -31,9 +31,7 @@
 	{!! Html::style('backend/css/animate.css?'.time()) !!}
 	{!! Html::style('backend/css/style.css?'.time()) !!}
 
-
-
-	{!! Html::style('frontend/css/custom.css?'.time()) !!}
+	{!! Html::style('backend/css/custom.css?'.time()) !!}
 
 	@yield('custom-styles')
 @show

@@ -2,9 +2,10 @@
 
 @section('content')
     <div class="loginColumns animated fadeInDown">
+        <h2 class="font-bold text-center">Welcome to Wevo Cloud</h2>
         <div class="row">
-            <div class="col-md-6">
-                <h2 class="font-bold">Welcome to Wevo Cloud</h2>
+            <div class="col-md-6 m-t">
+                <img src="{{ asset('img/wevo-logo.png') }}" class="logo">
             </div>
             <div class="col-md-6">
                 <div class="ibox-content">

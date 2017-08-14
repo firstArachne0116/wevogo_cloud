@@ -10,11 +10,12 @@ return [
      | to accept any value.
      |
      */
-    'supportsCredentials' => false,
+    'supportsCredentials' => true,
     'allowedOrigins' => ['*'],
-    'allowedHeaders' => ['*'],
-    'allowedMethods' => ['*'],
+    'allowedHeaders' => ['Content-Type', 'Accept', 'Authorization'],
+    'allowedMethods' => ['GET', 'POST', 'PUT',  'DELETE', 'OPTIONS'],
     'exposedHeaders' => [],
     'maxAge' => 0,
+    'hosts' => [],
 ];
 

@@ -18,11 +18,15 @@ class CreateWevoUsersTable extends Migration
             $table->increments('id');
             $table->integer('wevo_user_id')->index();
             $table->integer('freepbx_id')->index();
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('display_name')->nullable();
-            $table->string('phone_number')->index();
+            $table->string('phone_number')->unique();
             $table->string('phone_id');
             $table->string('uid')->nullable();
+            $table->boolean('is_verified')->default(false);
+            $table->string('username');
+            $table->string('password');
+            $table->string('freepbx_domain');
             $table->rememberToken();
             $table->timestamps();
         });

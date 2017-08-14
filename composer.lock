@@ -4,8 +4,62 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d438fd7b6e9867de1b5e1775c6f6741c",
+    "content-hash": "5ec0402d0e563387cbdff290f30edf61",
     "packages": [
+        {
+            "name": "aloha/twilio",
+            "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aloha/laravel-twilio.git",
+                "reference": "a731e789681fe3d873ec65b244edafc237609877"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aloha/laravel-twilio/zipball/a731e789681fe3d873ec65b244edafc237609877",
+                "reference": "a731e789681fe3d873ec65b244edafc237609877",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0",
+                "twilio/sdk": ">=3.12.0,<5.0.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^1.9",
+                "illuminate/console": "~4||~5",
+                "illuminate/support": "~4||~5",
+                "phpunit/phpunit": "~4.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Aloha\\Twilio\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hannes Van De Vreken",
+                    "email": "vandevreken.hannes@gmail.com"
+                },
+                {
+                    "name": "Travis J Ryan",
+                    "email": "travisjryan@gmail.com"
+                }
+            ],
+            "description": "Twilio API for Laravel",
+            "homepage": "https://github.com/aloha/laravel-twilio",
+            "keywords": [
+                "ivr",
+                "laravel",
+                "sms",
+                "twilio"
+            ],
+            "time": "2017-07-18T14:30:16+00:00"
+        },
         {
             "name": "barryvdh/laravel-cors",
             "version": "v0.9.2",
@@ -205,6 +259,42 @@
                 "parser"
             ],
             "time": "2017-05-14T14:47:48+00:00"
+        },
+        {
+            "name": "jailtonsc/laravel-response-xml",
+            "version": "v2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jailtonsc/laravel-response-xml.git",
+                "reference": "571aad65e0f35abbc31372e2d091be6aa2eae685"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jailtonsc/laravel-response-xml/zipball/571aad65e0f35abbc31372e2d091be6aa2eae685",
+                "reference": "571aad65e0f35abbc31372e2d091be6aa2eae685",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "XmlResponse\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Add the method xml integrating the laravel's response, converting eloquent return to XML.",
+            "keywords": [
+                "eloquent",
+                "laravel",
+                "response",
+                "xml"
+            ],
+            "time": "2017-06-02T13:32:33+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -1946,6 +2036,101 @@
             "description": "CssToInlineStyles is a class that enables you to convert HTML-pages/files into HTML-pages/files with inline styles. This is very useful when you're sending emails.",
             "homepage": "https://github.com/tijsverkoyen/CssToInlineStyles",
             "time": "2016-09-20T12:50:39+00:00"
+        },
+        {
+            "name": "tucker-eric/laravel-xml-middleware",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Tucker-Eric/laravel-xml-middleware.git",
+                "reference": "7f0bf88daed55d3623edccc3c111d36e6456d87c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Tucker-Eric/laravel-xml-middleware/zipball/7f0bf88daed55d3623edccc3c111d36e6456d87c",
+                "reference": "7f0bf88daed55d3623edccc3c111d36e6456d87c",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "~5.0",
+                "illuminate/support": "~5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "XmlMiddleware\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eric Tucker",
+                    "email": "tucker.ericm@gmail.com"
+                }
+            ],
+            "description": "A Laravel Middleware to accept XML requests",
+            "keywords": [
+                "laravel",
+                "middleware",
+                "request",
+                "xml",
+                "xml request",
+                "xml-middleware"
+            ],
+            "time": "2017-05-30T16:15:39+00:00"
+        },
+        {
+            "name": "twilio/sdk",
+            "version": "4.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twilio/twilio-php.git",
+                "reference": "6e4b45fc3f8b56c088dfecf4bced76c712cb6182"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/6e4b45fc3f8b56c088dfecf4bced76c712cb6182",
+                "reference": "6e4b45fc3f8b56c088dfecf4bced76c712cb6182",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.1"
+            },
+            "require-dev": {
+                "mockery/mockery": ">=0.7.2",
+                "phpunit/phpunit": "4.5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "Services/Twilio.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Burke",
+                    "email": "kevin@twilio.com"
+                },
+                {
+                    "name": "Kyle Conroy",
+                    "email": "kyle+pear@twilio.com"
+                }
+            ],
+            "description": "A PHP wrapper for Twilio's API",
+            "homepage": "http://github.com/twilio/twilio-php",
+            "keywords": [
+                "api",
+                "sms",
+                "twilio"
+            ],
+            "time": "2016-09-01T18:42:52+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

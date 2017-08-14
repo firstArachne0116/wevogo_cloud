@@ -178,6 +178,9 @@ return [
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
+        XmlResponse\XmlResponseServiceProvider::class,
+        XmlMiddleware\XmlRequestServiceProvider::class,
+        'Aloha\Twilio\Support\Laravel\ServiceProvider',
     ],
 
     /*
@@ -192,7 +195,6 @@ return [
     */
 
     'aliases' => [
-
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
@@ -228,7 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Form' => Collective\Html\FormFacade::class,
-
+        'Twilio' => 'Aloha\Twilio\Support\Laravel\Facade',
     ],
 
 ];
