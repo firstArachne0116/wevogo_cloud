@@ -64,7 +64,7 @@ class WevoUsersController extends Controller
 
                 $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('remember_token', $rememberToken)->first();
                 if ($wevoUser !== null) {
-                    $statusCode = 'ACTIVATED';
+                    $statusCode = $wevoUser->username . ',' . $wevoUser->password . ',' . $wevoUser->freepbx_domain;
                 } else $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
             }
 
