@@ -7,7 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
-use Twilio;
+use Aloha\Twilio\Twilio;
 
 class WevoUsersController extends Controller
 {
@@ -48,7 +48,8 @@ class WevoUsersController extends Controller
                         $rememberToken = generateRandomNumber(4);
                         $message = 'Wevo says that Your verification code is ' . $rememberToken;
 
-                        Twilio::message($phoneNumber, $message);
+                        $twilio = new Twilio(getenv('TWILIO_SID'), getenv('TWILIO_TOKEN'), getenv('TWILIO_FROM'));
+                        $twilio->message($phoneNumber, $message);
 
                         $wevoUser->remember_token = $rememberToken;
                         $wevoUser->save();

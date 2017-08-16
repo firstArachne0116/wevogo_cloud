@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Twilio;
-
 class DashboardController extends Controller
 {
     //
