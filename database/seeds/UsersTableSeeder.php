@@ -21,14 +21,14 @@ class UsersTableSeeder extends Seeder
         DB::table('wevo_users')->insert([
             'wevo_user_id' => 1,
             'freepbx_id' => 1,
-            'email' => 'test1@gmail.com',
-            'display_name' => 'Test1',
-            'phone_number' => '+85590748240',
+            'email' => 'lam@gmail.com',
+            'display_name' => 'Lam Jin',
+            'phone_number' => '+600123212103',
             'phone_id' => 0,
             'is_verified' => false,
-            'username' => 'test1',
-            'password' => 'test1123',
-            'freepbx_domain' => 'wevo.pbx.org'
+            'username' => '900',
+            'password' => '0123',
+            'freepbx_domain' => 'http://113.23.226.22:1443/'
         ]);
     }
 }
