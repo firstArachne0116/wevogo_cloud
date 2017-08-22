@@ -180,7 +180,7 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         XmlResponse\XmlResponseServiceProvider::class,
         XmlMiddleware\XmlRequestServiceProvider::class,
-        'Aloha\Twilio\Support\Laravel\ServiceProvider',
+        Nexmo\Laravel\NexmoServiceProvider::class,
     ],
 
     /*
@@ -230,7 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Form' => Collective\Html\FormFacade::class,
-        'Twilio' => 'Aloha\Twilio\Support\Laravel\Facade',
+        'Nexmo' => \Nexmo\Laravel\Facade\Nexmo::class
     ],
 
 ];

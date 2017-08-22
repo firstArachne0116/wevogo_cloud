@@ -21,12 +21,12 @@ class CreateWevoUsersTable extends Migration
             $table->string('email');
             $table->string('display_name')->nullable();
             $table->string('phone_number')->unique();
-            $table->string('phone_id');
+            $table->string('phone_id')->nullable();
             $table->string('uid')->nullable();
             $table->boolean('is_verified')->default(false);
-            $table->string('username');
-            $table->string('password');
-            $table->string('freepbx_domain');
+            $table->string('username')->nullable();
+            $table->string('password')->nullable();
+            $table->string('freepbx_domain')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

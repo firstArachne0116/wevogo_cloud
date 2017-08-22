@@ -6,12 +6,12 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
-        "aloha/twilio": "^3.0",
         "barryvdh/laravel-cors": "^0.9.2",
         "jailtonsc/laravel-response-xml": "^2.0",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.",
+        "nexmo/laravel": "^0.4.0",
         "tucker-eric/laravel-xml-middleware": "^1.0"
     },
     "require-dev": {

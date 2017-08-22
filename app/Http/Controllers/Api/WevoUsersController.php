@@ -7,7 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
-use Aloha\Twilio\Twilio;
+use Nexmo\Laravel\Facade\Nexmo;
 
 class WevoUsersController extends Controller
 {
@@ -32,9 +32,6 @@ class WevoUsersController extends Controller
                 else
                     $statusCode = 'NOK';
 
-                $content = view('api_response', compact('statusCode'));
-                return response($content, 200)
-                    ->header('Content-Type', 'text/xml');
             } else if ($requests['methodName'] === 'recover_phone_account') {
                 $params = $requests['params']['param'];
                 $phoneNumber = $params[0]['value']['string'];
@@ -48,12 +45,15 @@ class WevoUsersController extends Controller
                         $rememberToken = generateRandomNumber(4);
                         $message = 'Wevo says that Your verification code is ' . $rememberToken;
 
-                        $twilio = new Twilio(getenv('TWILIO_SID'), getenv('TWILIO_TOKEN'), getenv('TWILIO_FROM'));
-                        $twilio->message($phoneNumber, $message);
+                        Nexmo::message()->send([
+                            'to' => $phoneNumber,
+                            'from' => 'WevoGo',
+                            'text' => $message
+                        ]);
 
                         $wevoUser->remember_token = $rememberToken;
                         $wevoUser->save();
-                    } catch ( \Services_Twilio_RestException $e ) {
+                    } catch ( \Exception $e ) {
                         $statusCode = 'ERROR_CANNOT_SEND_SMS';
                     }
                 } else
@@ -69,6 +69,53 @@ class WevoUsersController extends Controller
                     $wevoUser->is_verified = true;
                     $wevoUser->save();
                 } else $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
+            } else if ($requests['methodName'] === 'get_phone_number_for_account') {
+                /*return response()->xml(User::all());*/
+                $params = $requests['params']['param'];
+                $phoneNumber = $params[0]['value']['string'];
+                /*$phoneNumber = substr($phoneNumber, 1);*/
+
+                if (WevoUser::where('phone_number', $phoneNumber)->exists())
+                    $statusCode = 'ERROR_ALIAS_DOESNT_EXIST';
+                else
+                    $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
+
+            } else if ($requests['methodName'] === 'create_phone_account') {
+                /*return response()->xml(User::all());*/
+                $params = $requests['params']['param'];
+                $phoneNumber = $params[0]['value']['string'];
+                /*$phoneNumber = substr($phoneNumber, 1);*/
+                $email = $params[1]['value']['string'];
+                $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('email', $email)->first();
+
+                if ($wevoUser === null) {
+                    $statusCode = 'OK';
+                    $wevoUser = new WevoUser;
+                    $wevoUser->wevo_user_id = 1;
+                    $wevoUser->freepbx_id = 1;
+                    $wevoUser->email = $email;
+                    $wevoUser->phone_number = $phoneNumber;
+                    $wevoUser->save();
+
+                    try {
+                        $rememberToken = generateRandomNumber(4);
+                        $message = 'WevoGo says that Your verification code is ' . $rememberToken;
+
+                        Nexmo::message()->send([
+                            'to' => $phoneNumber,
+                            'from' => 'WevoGo',
+                            'text' => $message
+                        ]);
+
+                        $wevoUser->remember_token = $rememberToken;
+                        $wevoUser->save();
+                    } catch ( \Exception $e ) {
+                        $statusCode = 'ERROR_CANNOT_SEND_SMS';
+                    }
+
+                } else
+                    $statusCode = 'ERROR_ACCOUNT_ALREADY_IN_USE';
+
             }
 
             $content = view('api_response', compact('statusCode'));

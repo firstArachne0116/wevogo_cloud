@@ -39,7 +39,7 @@
                         <tbody>
                         @foreach ($wevoUsers as $wevoUser)
                             <tr>
-                                <td>{{ $wevoUser->email }}</td>
+                                <td>{{ '' }}</td>
                                 <td>{{ $wevoUser->phone_number }}</td>
                                 <td>{{ $wevoUser->email }}</td>
                                 <td>{{ $wevoUser->created_at }}</td>
