@@ -65,7 +65,7 @@ class WevoUsersController extends Controller
 
                 $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('remember_token', $rememberToken)->first();
                 if ($wevoUser !== null) {
-                    $statusCode = $wevoUser->username . ',' . $wevoUser->password . ',' . $wevoUser->freepbx_domain;
+                    $statusCode = $wevoUser->extension . ',' . $wevoUser->secret . ',' . $wevoUser->freepbx_domain;
                     $wevoUser->is_verified = true;
                     $wevoUser->save();
                 } else $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
@@ -122,5 +122,29 @@ class WevoUsersController extends Controller
             return response($content, 200)
                 ->header('Content-Type', 'text/xml');
         }
+    }
+
+    public function create(Request $request)
+    {
+        $extension = $request->get('extension');
+        $email = $request->get('email');
+        $secret = $request->get('secret');
+        $phoneNumber = $request->get('phone_number');
+        $displayName = $request->get('display_name');
+        $freepbxDomain = $request->get('freepbx_domain');
+
+        $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('email', $email)->first();
+        if ($wevoUser === null) {
+            $wevoUser = new WevoUser;
+            $wevoUser->email = $email;
+            $wevoUser->phone_number = $phoneNumber;
+            $wevoUser->wevo_user_id = 1;
+            $wevoUser->freepbx_id = 1;
+        }
+        $wevoUser->extension = $extension;
+        $wevoUser->secret = $secret;
+        $wevoUser->display_name = $displayName;
+        $wevoUser->freepbx_domain = $freepbxDomain;
+        $wevoUser->save();
     }
 }

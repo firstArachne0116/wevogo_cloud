@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('wevo0123'),
         ]);
 
-        /*DB::table('wevo_users')->insert([
+        DB::table('wevo_users')->insert([
             'wevo_user_id' => 1,
             'freepbx_id' => 1,
             'email' => 'lam@gmail.com',
@@ -27,8 +27,8 @@ class UsersTableSeeder extends Seeder
             'phone_id' => 0,
             'is_verified' => false,
             'username' => '900',
-            'password' => '0123',
-            'freepbx_domain' => 'http://113.23.226.22:1443/'
-        ]);*/
+            'password' => 'test123',
+            'freepbx_domain' => 'http://113.23.226.22:26060/'
+        ]);
     }
 }

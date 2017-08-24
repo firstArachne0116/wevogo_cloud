@@ -24,8 +24,8 @@ class CreateWevoUsersTable extends Migration
             $table->string('phone_id')->nullable();
             $table->string('uid')->nullable();
             $table->boolean('is_verified')->default(false);
-            $table->string('username')->nullable();
-            $table->string('password')->nullable();
+            $table->string('extension')->nullable();
+            $table->string('secret')->nullable();
             $table->string('freepbx_domain')->nullable();
             $table->rememberToken();
             $table->timestamps();
