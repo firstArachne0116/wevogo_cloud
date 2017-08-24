@@ -137,7 +137,7 @@ class WevoUsersController extends Controller
         if ($wevoUser === null) {
             $wevoUser = new WevoUser;
             $wevoUser->email = $email;
-            $wevoUser->phone_number = $phoneNumber;
+            $wevoUser->phone_number = '+' . $phoneNumber;
             $wevoUser->wevo_user_id = 1;
             $wevoUser->freepbx_id = 1;
         }
