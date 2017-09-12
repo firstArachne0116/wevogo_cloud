@@ -14,6 +14,7 @@ Route::get('/', 'DashboardController@index')->name('dashboard');
 Route::resource('/dashboard', 'DashboardController', ['only' => ['index']]);
 Route::resource('users', 'UsersController');
 Route::resource('wevo-users', 'WevoUsersController');
+Route::resource('wevo-servers', 'WevoServersController');
 
 Auth::routes();
 

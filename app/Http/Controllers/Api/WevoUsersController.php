@@ -133,7 +133,8 @@ class WevoUsersController extends Controller
         $displayName = $request->get('display_name');
         $freepbxDomain = $request->get('freepbx_domain');
 
-        $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('email', $email)->first();
+        $wevoUser = WevoUser::where('phone_number', $phoneNumber)
+                                ->where('email', $email)->first();
         if ($wevoUser === null) {
             $wevoUser = new WevoUser;
             $wevoUser->email = $email;

@@ -77,9 +77,13 @@
 						<a href="{!! URL::route('dashboard.index') !!}"><i class="fa fa-th-large"></i>
 							<span class="nav-label">Dashboard</span></a>
 					</li>
+					<li class="{{active_class($controller, 'WevoServersController')}}">
+						<a href="{!! URL::route('wevo-servers.index') !!}"><i class="fa fa-server"></i>
+							<span class="nav-label">Wevogo Servers</span></a>
+					</li>
 					<li class="{{active_class($controller, 'WevoUsersController')}}">
 						<a href="{!! URL::route('wevo-users.index') !!}"><i class="fa fa-life-bouy"></i>
-							<span class="nav-label">Wevo Users</span></a>
+							<span class="nav-label">Wevogo Users</span></a>
 					</li>
 				</ul>
 
