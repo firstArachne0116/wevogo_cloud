@@ -27,6 +27,8 @@ class CreateWevoUsersTable extends Migration
             $table->string('extension')->nullable();
             $table->string('secret')->nullable();
             $table->string('freepbx_domain')->nullable();
+            $table->string('device_type')->nullable();
+            $table->string('device_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

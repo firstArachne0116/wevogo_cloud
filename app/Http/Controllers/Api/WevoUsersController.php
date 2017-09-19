@@ -38,12 +38,14 @@ class WevoUsersController extends Controller
                 /*$phoneNumber = substr($phoneNumber, 1);*/
 
                 $email = $params[1]['value']['string'];
+                $deviceType = $params[2]['value']['string'];
+                $deviceToken = $params[3]['value']['string'];
                 $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('email', $email)->first();
                 if ($wevoUser !== null) {
                     $statusCode = 'OK';
                     try {
                         $rememberToken = generateRandomNumber(4);
-                        $message = 'Wevo says that Your verification code is ' . $rememberToken;
+                        $message = 'Wevogo says that Your verification code is ' . $rememberToken;
 
                         Nexmo::message()->send([
                             'to' => $phoneNumber,
@@ -52,6 +54,8 @@ class WevoUsersController extends Controller
                         ]);
 
                         $wevoUser->remember_token = $rememberToken;
+                        $wevoUser->device_type = $deviceType;
+                        $wevoUser->device_token = $deviceToken;
                         $wevoUser->save();
                     } catch ( \Exception $e ) {
                         $statusCode = 'ERROR_CANNOT_SEND_SMS';
