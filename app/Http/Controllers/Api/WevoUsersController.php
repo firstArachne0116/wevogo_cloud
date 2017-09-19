@@ -38,8 +38,6 @@ class WevoUsersController extends Controller
                 /*$phoneNumber = substr($phoneNumber, 1);*/
 
                 $email = $params[1]['value']['string'];
-                $deviceType = $params[2]['value']['string'];
-                $deviceToken = $params[3]['value']['string'];
                 $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('email', $email)->first();
                 if ($wevoUser !== null) {
                     $statusCode = 'OK';
@@ -54,8 +52,6 @@ class WevoUsersController extends Controller
                         ]);
 
                         $wevoUser->remember_token = $rememberToken;
-                        $wevoUser->device_type = $deviceType;
-                        $wevoUser->device_token = $deviceToken;
                         $wevoUser->save();
                     } catch ( \Exception $e ) {
                         $statusCode = 'ERROR_CANNOT_SEND_SMS';
@@ -66,11 +62,14 @@ class WevoUsersController extends Controller
                 $params = $requests['params']['param'];
                 $phoneNumber = $params[0]['value']['string'];
                 $rememberToken = $params[2]['value']['string'];
-
+                $deviceType = $params[3]['value']['string'];
+                $deviceToken = $params[4]['value']['string'];
                 $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('remember_token', $rememberToken)->first();
                 if ($wevoUser !== null) {
                     $statusCode = $wevoUser->extension . ',' . $wevoUser->secret . ',' . $wevoUser->freepbx_domain;
                     $wevoUser->is_verified = true;
+                    $wevoUser->device_type = $deviceType;
+                    $wevoUser->device_token = $deviceToken;
                     $wevoUser->save();
                 } else $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
             } else if ($requests['methodName'] === 'get_phone_number_for_account') {
