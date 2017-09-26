@@ -45,11 +45,11 @@ class WevoUsersController extends Controller
                         $rememberToken = generateRandomNumber(4);
                         $message = 'Wevogo says that Your verification code is ' . $rememberToken;
 
-                        Nexmo::message()->send([
+                        /*Nexmo::message()->send([
                             'to' => $phoneNumber,
                             'from' => 'WevoGo',
                             'text' => $message
-                        ]);
+                        ]);*/
 
                         $wevoUser->remember_token = $rememberToken;
                         $wevoUser->save();
@@ -119,6 +119,17 @@ class WevoUsersController extends Controller
                 } else
                     $statusCode = 'ERROR_ACCOUNT_ALREADY_IN_USE';
 
+            } else if ($requests['methodName'] === 'get_provision_setting') {
+                $params = $requests['params']['param'];
+                $phoneNumber = $params[0]['value']['string'];
+                $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('email', $email)->first();
+
+                if ($wevoUser === null) {
+                    $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
+                } else if (!$wevoUser->is_verified) {
+                    $statusCode = 'ERROR_ACCOUNT_IS_NOT_PROVISIONED_YET';
+                } else
+                    $statusCode = $wevoUser->extension . ',' . $wevoUser->secret . ',' . $wevoUser->freepbx_domain;
             }
 
             $content = view('api_response', compact('statusCode'));
@@ -129,12 +140,13 @@ class WevoUsersController extends Controller
 
     public function create(Request $request)
     {
-        $extension = $request->get('extension');
-        $email = $request->get('email');
+        Log::debug($request->all());
+        $extension = $request->get('user_extension');
+        $email = $request->get('user_email');
         $secret = $request->get('secret');
-        $phoneNumber = $request->get('phone_number');
-        $displayName = $request->get('display_name');
-        $freepbxDomain = $request->get('freepbx_domain');
+        $phoneNumber = $request->get('user_phone_number');
+        $displayName = $request->get('user_display_name');
+        $freepbxDomain = $request->get('wevopbx_domain');
 
         $wevoUser = WevoUser::where('phone_number', $phoneNumber)
                                 ->where('email', $email)->first();
