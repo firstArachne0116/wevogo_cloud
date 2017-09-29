@@ -104,11 +104,11 @@ class WevoUsersController extends Controller
                         $rememberToken = generateRandomNumber(4);
                         $message = 'WevoGo says that Your verification code is ' . $rememberToken;
 
-                        Nexmo::message()->send([
+                        /*Nexmo::message()->send([
                             'to' => $phoneNumber,
                             'from' => 'WevoGo',
                             'text' => $message
-                        ]);
+                        ]);*/
 
                         $wevoUser->remember_token = $rememberToken;
                         $wevoUser->save();
@@ -119,10 +119,11 @@ class WevoUsersController extends Controller
                 } else
                     $statusCode = 'ERROR_ACCOUNT_ALREADY_IN_USE';
 
-            } else if ($requests['methodName'] === 'get_provision_setting') {
+            } else if ($requests['methodName'] === 'get_provision_settings') {
+                Log::debug($request->all());
                 $params = $requests['params']['param'];
-                $phoneNumber = $params[0]['value']['string'];
-                $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('email', $email)->first();
+                $phoneNumber = $params['value']['string'];
+                $wevoUser = WevoUser::where('phone_number', $phoneNumber)->first();
 
                 if ($wevoUser === null) {
                     $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
