@@ -127,7 +127,7 @@ class WevoUsersController extends Controller
 
                 if ($wevoUser === null) {
                     $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
-                } else if (!$wevoUser->is_verified) {
+                } else if ($wevoUser->extension === null) {
                     $statusCode = 'ERROR_ACCOUNT_IS_NOT_PROVISIONED_YET';
                 } else
                     $statusCode = $wevoUser->extension . ',' . $wevoUser->secret . ',' . $wevoUser->freepbx_domain;
