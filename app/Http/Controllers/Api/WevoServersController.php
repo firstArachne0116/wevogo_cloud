@@ -11,7 +11,7 @@ class WevoServersController extends Controller
 {
     //
 
-    public function create(Request $request) {
+    public function index(Request $request) {
         $requests = $request->all();
          Log::debug($requests);
         if (isset($requests['methodName'])) {

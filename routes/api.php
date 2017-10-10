@@ -20,5 +20,5 @@ use Illuminate\Http\Request;
 Route::group(['middleware' => ['api', 'xml']], function() {
     Route::post('/wevo-users', 'Api\WevoUsersController@index');
     Route::post('/wevo-users/create', 'Api\WevoUsersController@create');
-    Route::post('/wevo-servers/create', 'Api\WevoServersController@create');
+    Route::post('/wevo-servers/create', 'Api\WevoServersController@index');
 });
