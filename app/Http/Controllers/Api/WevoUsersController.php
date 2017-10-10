@@ -95,7 +95,7 @@ class WevoUsersController extends Controller
                     $statusCode = 'OK';
                     $wevoUser = new WevoUser;
                     $wevoUser->wevo_user_id = 1;
-                    $wevoUser->freepbx_id = 1;
+                    $wevoUser->wevo_server_id = 1;
                     $wevoUser->email = $email;
                     $wevoUser->phone_number = $phoneNumber;
                     $wevoUser->save();
@@ -156,7 +156,7 @@ class WevoUsersController extends Controller
             $wevoUser->email = $email;
             $wevoUser->phone_number = '+' . $phoneNumber;
             $wevoUser->wevo_user_id = 1;
-            $wevoUser->freepbx_id = 1;
+            $wevoUser->wevo_server_id = 1;
         }
         $wevoUser->extension = $extension;
         $wevoUser->secret = $secret;

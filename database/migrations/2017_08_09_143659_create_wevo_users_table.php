@@ -17,7 +17,7 @@ class CreateWevoUsersTable extends Migration
         Schema::create('wevo_users', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('wevo_user_id')->index();
-            $table->integer('freepbx_id')->index();
+            $table->integer('wevo_server_id')->index();
             $table->string('email');
             $table->string('display_name')->nullable();
             $table->string('phone_number')->unique();
