@@ -33,7 +33,7 @@ class WevoServersController extends Controller
 
                 $data['statusCode'] = 200;
                 $data['wevoServerId'] = $wevoServer->id;
-                $content = view('api_response_pbx', $data);
+                $content = view('api_response', $data);
                 return response($content, 200)
                     ->header('Content-Type', 'text/xml');
             }
