@@ -31,9 +31,9 @@ class WevoServersController extends Controller
                 $wevoServer->date_time = $dateTime;
                 $wevoServer->save();
 
-                $statusCode = 200;
-                $wevoServerId = $wevoServer->id;
-                $content = view('api_response_pbx', compact('statusCode', 'wevoServerId'));
+                $data['statusCode'] = 200;
+                $data['wevoServerId'] = $wevoServer->id;
+                $content = view('api_response_pbx', $data);
                 return response($content, 200)
                     ->header('Content-Type', 'text/xml');
             }
