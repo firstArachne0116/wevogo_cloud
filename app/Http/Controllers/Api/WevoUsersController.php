@@ -148,15 +148,14 @@ class WevoUsersController extends Controller
             if ($requests['methodName'] === 'wevo_user_info') {
                 /*return response()->xml(User::all());*/
                 $params = $requests['params']['param'];
-                $wevoServerId = $params[0]['value']['string'];
-                $wevopbxDomain = $params[1]['value']['string'];
+                $wevoServerId = is_array($params[0]['value']['string']) ? '' : $params[0]['value']['string'];
+                $wevopbxDomain = is_array($params[1]['value']['string']) ? '' : $params[1]['value']['string'];
                 $wevopbxLocalDomain = $params[2]['value']['string'];
                 $extension = $params[51]['value']['string'];
                 $phoneNumber = $params[52]['value']['string'];
                 $email = $params[53]['value']['string'];
                 $displayName = $params[54]['value']['string'];
-                Log::debug($requests);
-                exit;
+
                 $wevoUser = WevoUser::where('phone_number', $phoneNumber)
                     ->where('email', $email)->first();
                 if ($wevoUser === null) {
@@ -176,13 +175,13 @@ class WevoUsersController extends Controller
 
                 $wevoDevice->wevo_user_id = $wevoUser->id;
                 $wevoDevice->acc_uname = $params[3]['value']['string'];
-                $wevoDevice->acc_auth = $params[4]['value']['string'];
+                $wevoDevice->acc_auth = is_array($params[4]['value']['string']) ? '' : $params[4]['value']['string'];
                 $wevoDevice->acc_secret = $params[5]['value']['string'];
                 $wevoDevice->acc_transport = $params[6]['value']['string'];
-                $wevoDevice->acc_proxy = $params[7]['value']['string'];
+                $wevoDevice->acc_proxy = is_array($params[7]['value']['string']) ? '' : $params[7]['value']['string'];
                 $wevoDevice->acc_proxy_enable = $params[8]['value']['string'];
                 $wevoDevice->acc_reg_expire = $params[9]['value']['string'];
-                $wevoDevice->acc_prefix = $params[10]['value']['string'];
+                $wevoDevice->acc_prefix = is_array($params[10]['value']['string']) ? '' : $params[10]['value']['string'];
                 $wevoDevice->acc_avpf_enable = $params[11]['value']['string'];
                 $wevoDevice->acc_avpf_interval = $params[12]['value']['string'];
                 $wevoDevice->acc_plus_00 = $params[13]['value']['string'];
@@ -208,21 +207,21 @@ class WevoUsersController extends Controller
                 $wevoDevice->chat_share_server = $params[33]['value']['string'];
                 $wevoDevice->net_wifi_only = $params[34]['value']['string'];
                 $wevoDevice->net_dmode_enable = $params[35]['value']['string'];
-                $wevoDevice->net_stun_turn_server = $params[36]['value']['string'];
+                $wevoDevice->net_stun_turn_server = is_array($params[36]['value']['string']) ? '' : $params[36]['value']['string'];
                 $wevoDevice->net_ice_enable = $params[37]['value']['string'];
                 $wevoDevice->net_turn_enable = $params[38]['value']['string'];
-                $wevoDevice->net_stun_turn_uname = $params[39]['value']['string'];
-                $wevoDevice->net_stun_turn_pass = $params[40]['value']['string'];
+                $wevoDevice->net_stun_turn_uname = is_array($params[39]['value']['string']) ? '' : $params[39]['value']['string'];
+                $wevoDevice->net_stun_turn_pass = is_array($params[40]['value']['string']) ? '' : $params[40]['value']['string'];
                 $wevoDevice->net_rnd_ports_enable = $params[41]['value']['string'];
-                $wevoDevice->net_sip_port = $params[42]['value']['string'];
+                $wevoDevice->net_sip_port = is_array($params[42]['value']['string']) ? '' : $params[42]['value']['string'];
                 $wevoDevice->net_push_notify_enable = $params[43]['value']['string'];
                 $wevoDevice->net_ipv6_allow = $params[44]['value']['string'];
                 $wevoDevice->adv_flist_subs_enable = $params[45]['value']['string'];
                 $wevoDevice->adv_bg_enable = $params[46]['value']['string'];
                 $wevoDevice->adv_svc_notify_enable = $params[47]['value']['string'];
                 $wevoDevice->adv_boot_start = $params[48]['value']['string'];
-                $wevoDevice->adv_pa_dname = $params[49]['value']['string'];
-                $wevoDevice->adv_pa_uname = $params[50]['value']['string'];
+                $wevoDevice->adv_pa_dname = is_array($params[49]['value']['string']) ? '' : $params[49]['value']['string'];;
+                $wevoDevice->adv_pa_uname = is_array($params[50]['value']['string']) ? '' : $params[50]['value']['string'];
                 $wevoDevice->save();
 
                 $statusCode = 200;
