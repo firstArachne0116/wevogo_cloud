@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Model\WevoDevice;
 use App\Model\WevoUser;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Nexmo\Laravel\Facade\Nexmo;
+use Spatie\ArrayToXml\ArrayToXml;
 
 class WevoUsersController extends Controller
 {
@@ -141,27 +143,150 @@ class WevoUsersController extends Controller
 
     public function create(Request $request)
     {
-        Log::debug($request->all());
-        $extension = $request->get('user_extension');
-        $email = $request->get('user_email');
-        $secret = $request->get('secret');
-        $phoneNumber = $request->get('user_phone_number');
-        $displayName = $request->get('user_display_name');
-        $freepbxDomain = $request->get('wevopbx_domain');
+        $requests = $request->all();
+        if (isset($requests['methodName'])) {
+            if ($requests['methodName'] === 'wevo_user_info') {
+                /*return response()->xml(User::all());*/
+                $params = $requests['params']['param'];
+                $wevoServerId = $params[0]['value']['string'];
+                $wevopbxDomain = $params[1]['value']['string'];
+                $wevopbxLocalDomain = $params[2]['value']['string'];
+                $extension = $params[51]['value']['string'];
+                $phoneNumber = $params[52]['value']['string'];
+                $email = $params[53]['value']['string'];
+                $displayName = $params[54]['value']['string'];
+                Log::debug($requests);
+                exit;
+                $wevoUser = WevoUser::where('phone_number', $phoneNumber)
+                    ->where('email', $email)->first();
+                if ($wevoUser === null) {
+                    $wevoUser = new WevoUser;
+                    $wevoUser->email = $email;
+                    $wevoUser->phone_number = '+' . $phoneNumber;
+                    $wevoUser->wevo_server_id = $wevoServerId;
+                    $wevoDevice = new WevoDevice;
+                } else $wevoDevice = $wevoUser->wevoDevice;
 
-        $wevoUser = WevoUser::where('phone_number', $phoneNumber)
-                                ->where('email', $email)->first();
-        if ($wevoUser === null) {
-            $wevoUser = new WevoUser;
-            $wevoUser->email = $email;
-            $wevoUser->phone_number = '+' . $phoneNumber;
-            $wevoUser->wevo_user_id = 1;
-            $wevoUser->wevo_server_id = 1;
+                $wevoUser->extension = $extension;
+                $wevoUser->display_name = $displayName;
+                $wevoUser->wevopbx_local_domain = $wevopbxLocalDomain;
+                $wevoUser->wevopbx_domain = $wevopbxDomain;
+
+                $wevoUser->save();
+
+                $wevoDevice->wevo_user_id = $wevoUser->id;
+                $wevoDevice->acc_uname = $params[3]['value']['string'];
+                $wevoDevice->acc_auth = $params[4]['value']['string'];
+                $wevoDevice->acc_secret = $params[5]['value']['string'];
+                $wevoDevice->acc_transport = $params[6]['value']['string'];
+                $wevoDevice->acc_proxy = $params[7]['value']['string'];
+                $wevoDevice->acc_proxy_enable = $params[8]['value']['string'];
+                $wevoDevice->acc_reg_expire = $params[9]['value']['string'];
+                $wevoDevice->acc_prefix = $params[10]['value']['string'];
+                $wevoDevice->acc_avpf_enable = $params[11]['value']['string'];
+                $wevoDevice->acc_avpf_interval = $params[12]['value']['string'];
+                $wevoDevice->acc_plus_00 = $params[13]['value']['string'];
+                $wevoDevice->acc_disableac = $params[14]['value']['string'];
+                $wevoDevice->audio_eco_can_enable = $params[15]['value']['string'];
+                $wevoDevice->audio_adp_rate_enable = $params[16]['value']['string'];
+                $wevoDevice->audio_codec_rate_lim = $params[17]['value']['string'];
+                $wevoDevice->audio_codec = $params[18]['value']['string'];
+                $wevoDevice->video_enable = $params[19]['value']['string'];
+                $wevoDevice->video_always_initiate = $params[20]['value']['string'];
+                $wevoDevice->video_always_accept = $params[21]['value']['string'];
+                $wevoDevice->video_preset = $params[22]['value']['string'];
+                $wevoDevice->video_size = $params[23]['value']['string'];
+                $wevoDevice->video_overlay = $params[24]['value']['string'];
+                $wevoDevice->video_codec = $params[25]['value']['string'];
+                $wevoDevice->call_use_internal_ringtone = $params[26]['value']['string'];
+                $wevoDevice->call_media_encryption = $params[27]['value']['string'];
+                $wevoDevice->call_dtmf_sipinfo_enable = $params[28]['value']['string'];
+                $wevoDevice->call_dtmf_rfc2833_enable = $params[29]['value']['string'];
+                $wevoDevice->call_auto_answer_enable = $params[30]['value']['string'];
+                $wevoDevice->call_vm_uri = $params[31]['value']['string'];
+                $wevoDevice->chat_encrypt_enable = $params[32]['value']['string'];
+                $wevoDevice->chat_share_server = $params[33]['value']['string'];
+                $wevoDevice->net_wifi_only = $params[34]['value']['string'];
+                $wevoDevice->net_dmode_enable = $params[35]['value']['string'];
+                $wevoDevice->net_stun_turn_server = $params[36]['value']['string'];
+                $wevoDevice->net_ice_enable = $params[37]['value']['string'];
+                $wevoDevice->net_turn_enable = $params[38]['value']['string'];
+                $wevoDevice->net_stun_turn_uname = $params[39]['value']['string'];
+                $wevoDevice->net_stun_turn_pass = $params[40]['value']['string'];
+                $wevoDevice->net_rnd_ports_enable = $params[41]['value']['string'];
+                $wevoDevice->net_sip_port = $params[42]['value']['string'];
+                $wevoDevice->net_push_notify_enable = $params[43]['value']['string'];
+                $wevoDevice->net_ipv6_allow = $params[44]['value']['string'];
+                $wevoDevice->adv_flist_subs_enable = $params[45]['value']['string'];
+                $wevoDevice->adv_bg_enable = $params[46]['value']['string'];
+                $wevoDevice->adv_svc_notify_enable = $params[47]['value']['string'];
+                $wevoDevice->adv_boot_start = $params[48]['value']['string'];
+                $wevoDevice->adv_pa_dname = $params[49]['value']['string'];
+                $wevoDevice->adv_pa_uname = $params[50]['value']['string'];
+                $wevoDevice->save();
+
+                $statusCode = 200;
+                $content = view('api_response', compact('statusCode'));
+                return response($content, 200)
+                    ->header('Content-Type', 'text/xml');
+            }
         }
-        $wevoUser->extension = $extension;
-        $wevoUser->secret = $secret;
-        $wevoUser->display_name = $displayName;
-        $wevoUser->freepbx_domain = $freepbxDomain;
-        $wevoUser->save();
+
     }
+
+    public function sendDeviceTokenToPbx()
+    {
+        $headers = array(
+            "Content-type: text/xml",
+        );
+        $deviceToken = 'test_token';
+        $deviceUserName = 'test_device';
+        $deviceType = 'android';
+
+        $xmlArray = [
+            'methodCall' => [
+                'methodName' => 'device_token',
+                'params' => [
+                    0 => [
+                        'param' => [
+                            'value' => [ 'string' => $deviceUserName],
+                        ]
+                    ],
+                    1 => [
+                        'param' => [
+                            'value' => [ 'string' => $deviceType],
+                        ]
+                    ],
+                    2 => [
+                        'param' => [
+                            'value' => [ 'string' => $deviceToken],
+                        ]
+                    ],
+                ]
+            ]
+        ];
+
+        $xmlContent = ArrayToXml::convert($xmlArray);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_ENCODING, "");
+        curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);    # required for https urls
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 15);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 120);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_URL, "http://192.168.2.250/api/test_user");
+
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlContent);
+        curl_exec($ch);
+        $status = curl_getinfo($ch);
+        curl_close($ch);
+    }
+
+
 }

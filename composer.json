@@ -12,6 +12,7 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.",
         "nexmo/laravel": "^0.4.0",
+        "spatie/array-to-xml": "^2.7",
         "tucker-eric/laravel-xml-middleware": "^1.0"
     },
     "require-dev": {

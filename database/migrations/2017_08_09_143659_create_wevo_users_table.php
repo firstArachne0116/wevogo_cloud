@@ -16,19 +16,15 @@ class CreateWevoUsersTable extends Migration
         //
         Schema::create('wevo_users', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('wevo_user_id')->index();
             $table->integer('wevo_server_id')->index();
             $table->string('email');
             $table->string('display_name')->nullable();
-            $table->string('phone_number')->unique();
-            $table->string('phone_id')->nullable();
-            $table->string('uid')->nullable();
+            $table->string('phone_number');
             $table->boolean('is_verified')->default(false);
             $table->string('extension')->nullable();
             $table->string('secret')->nullable();
-            $table->string('freepbx_domain')->nullable();
-            $table->string('device_type')->nullable();
-            $table->string('device_token')->nullable();
+            $table->string('wevopbx_domain')->nullable();
+            $table->string('wevopbx_local_domain')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
