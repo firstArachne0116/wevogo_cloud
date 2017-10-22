@@ -17,7 +17,9 @@ class CreateWevoDevicesTable extends Migration
         Schema::create('wevo_devices', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('wevo_user_id')->unsigned();
-            $table->string('acc_uname');
+            $table->string('device_type')->nullable();
+            $table->string('device_token')->nullable();
+            $table->string('acc_uname')->index();
             $table->string('acc_secret');
             $table->string('acc_auth')->nullable();
             $table->string('acc_transport');

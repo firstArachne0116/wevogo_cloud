@@ -9,6 +9,6 @@ class WevoUser extends Model
     //
     public function wevoDevice()
     {
-        return $this->hasOne('App/Model/WevoDevice');
+        return $this->hasOne('App\Model\WevoDevice');
     }
 }

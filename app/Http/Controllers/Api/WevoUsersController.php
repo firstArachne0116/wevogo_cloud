@@ -68,11 +68,14 @@ class WevoUsersController extends Controller
                 $deviceToken = $params[4]['value']['string'];
                 $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('remember_token', $rememberToken)->first();
                 if ($wevoUser !== null) {
-                    $statusCode = $wevoUser->extension . ',' . $wevoUser->secret . ',' . $wevoUser->freepbx_domain;
+                    $wevoDevice = $wevoUser->wevoDevice;
+                    $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain;
                     $wevoUser->is_verified = true;
-                    $wevoUser->device_type = $deviceType;
-                    $wevoUser->device_token = $deviceToken;
                     $wevoUser->save();
+
+                    $wevoDevice->device_type = $deviceType;
+                    $wevoDevice->device_token = $deviceToken;
+                    $wevoDevice->save();
                 } else $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
             } else if ($requests['methodName'] === 'get_phone_number_for_account') {
                 /*return response()->xml(User::all());*/
@@ -126,13 +129,15 @@ class WevoUsersController extends Controller
                 $params = $requests['params']['param'];
                 $phoneNumber = $params['value']['string'];
                 $wevoUser = WevoUser::where('phone_number', $phoneNumber)->first();
-
                 if ($wevoUser === null) {
                     $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
                 } else if ($wevoUser->extension === null) {
                     $statusCode = 'ERROR_ACCOUNT_IS_NOT_PROVISIONED_YET';
-                } else
-                    $statusCode = $wevoUser->extension . ',' . $wevoUser->secret . ',' . $wevoUser->freepbx_domain;
+                } else {
+                    $wevoDevice = $wevoUser->wevoDevice;
+                    $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain;
+                }
+
             }
 
             $content = view('api_response', compact('statusCode'));
@@ -225,8 +230,32 @@ class WevoUsersController extends Controller
                 $wevoDevice->save();
 
                 $statusCode = 200;
-                $content = view('api_response', compact('statusCode'));
-                return response($content, 200)
+
+                $xmlArray = [
+                    'methodCall' => [
+                        'methodName' => 'device_token',
+                        'params' => [
+                            0 => [
+                                'param' => [
+                                    'value' => [ 'string' => $wevoDevice->acc_uname],
+                                ]
+                            ],
+                            1 => [
+                                'param' => [
+                                    'value' => [ 'string' => $wevoDevice->device_type],
+                                ]
+                            ],
+                            2 => [
+                                'param' => [
+                                    'value' => [ 'string' => $wevoDevice->device_token],
+                                ]
+                            ],
+                        ]
+                    ]
+                ];
+                $xmlContent = ArrayToXml::convert($xmlArray);
+
+                return response($xmlContent, 200)
                     ->header('Content-Type', 'text/xml');
             }
         }
