@@ -22,3 +22,7 @@ Route::group(['middleware' => ['api', 'xml']], function() {
     Route::post('/wevo-users/create', 'Api\WevoUsersController@create');
     Route::post('/wevo-servers/create', 'Api\WevoServersController@create');
 });
+
+Route::group(['middleware' => ['api']], function() {
+    Route::delete('/wevo-users/{id}/delete', 'Api\WevoUsersController@destroy');
+});

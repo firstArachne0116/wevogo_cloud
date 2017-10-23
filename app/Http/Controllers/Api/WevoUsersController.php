@@ -76,6 +76,8 @@ class WevoUsersController extends Controller
                     $wevoDevice->device_type = $deviceType;
                     $wevoDevice->device_token = $deviceToken;
                     $wevoDevice->save();
+
+                    $this->sendDeviceTokenToPbx($wevoUser);
                 } else $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
             } else if ($requests['methodName'] === 'get_phone_number_for_account') {
                 /*return response()->xml(User::all());*/
@@ -262,14 +264,14 @@ class WevoUsersController extends Controller
 
     }
 
-    public function sendDeviceTokenToPbx()
+    public function sendDeviceTokenToPbx($wevoUser)
     {
         $headers = array(
             "Content-type: text/xml",
         );
-        $deviceToken = 'test_token';
-        $deviceUserName = 'test_device';
-        $deviceType = 'android';
+        $deviceToken = $wevoUser->wevoDevice->device_token;
+        $deviceUserName = $wevoUser->wevoDevice->acc_uname;
+        $deviceType = $wevoUser->wevoDevice->device_type;
 
         $xmlArray = [
             'methodCall' => [
@@ -307,7 +309,7 @@ class WevoUsersController extends Controller
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_URL, "http://192.168.2.250/api/test_user");
+        curl_setopt($ch, CURLOPT_URL, "http://192.168.2.254:8888/wevogo/");
 
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlContent);
@@ -316,5 +318,8 @@ class WevoUsersController extends Controller
         curl_close($ch);
     }
 
-
+    public function destroy($extension)
+    {
+        WevoUser::where('extension', $extension)->delete();
+    }
 }
