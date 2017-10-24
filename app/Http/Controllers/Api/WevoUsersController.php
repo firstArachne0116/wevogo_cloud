@@ -309,7 +309,7 @@ class WevoUsersController extends Controller
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_URL, "http://192.168.2.254:8888/wevogo/");
+        curl_setopt($ch, CURLOPT_URL, config('services.wevopbx_url') . "/wevogo/");
 
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlContent);

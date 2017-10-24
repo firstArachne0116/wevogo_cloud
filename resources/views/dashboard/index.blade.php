@@ -4,7 +4,7 @@
 @endsection
 
 @section('content')
-    <a href="{{ route('dashboard.store') }}" class="btn test-btn btn-info"><i class="fa fa-edit"></i> test</a>
+    {{ var_dump(config('services.wevopbx_url')) }}
 @stop
 
 @section('custom-scripts')
