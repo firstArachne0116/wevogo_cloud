@@ -176,7 +176,7 @@ class WevoUsersController extends Controller
 
                 $wevoUser->extension = $extension;
                 $wevoUser->display_name = $displayName;
-                $wevoUser->wevopbx_local_domain = $wevopbxLocalDomain;
+                $wevoUser->wevopbx_local_domain = $wevopbxLocalDomain . ':26060';
                 $wevoUser->wevopbx_domain = $wevopbxDomain;
 
                 $wevoUser->save();
