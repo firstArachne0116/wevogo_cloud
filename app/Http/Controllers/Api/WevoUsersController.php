@@ -61,6 +61,7 @@ class WevoUsersController extends Controller
                 } else
                     $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
             } else if ($requests['methodName'] === 'activate_phone_account') {
+                Log::debug($requests);
                 $params = $requests['params']['param'];
                 $phoneNumber = $params[0]['value']['string'];
                 $rememberToken = $params[2]['value']['string'];
