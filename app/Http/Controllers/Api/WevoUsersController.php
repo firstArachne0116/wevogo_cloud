@@ -278,26 +278,28 @@ class WevoUsersController extends Controller
             'methodCall' => [
                 'methodName' => 'device_token',
                 'params' => [
-                    0 => [
-                        'param' => [
-                            'value' => [ 'string' => $deviceUserName],
-                        ]
-                    ],
-                    1 => [
-                        'param' => [
-                            'value' => [ 'string' => $deviceType],
-                        ]
-                    ],
-                    2 => [
-                        'param' => [
-                            'value' => [ 'string' => $deviceToken],
-                        ]
-                    ],
+                    'param1' => [
+                        0 => [
+                            'value' => array(
+                                'string' => $deviceUserName
+                            )
+                        ],
+                        1 => [
+                            'value' => [
+                                'string' => $deviceType
+                            ]
+                        ],
+                        2 => [
+                            'value' => [
+                                'string' => $deviceToken
+                            ]
+                        ],
+                    ]
                 ]
             ]
         ];
 
-        $xmlContent = ArrayToXml::convert($xmlArray);
+        $xmlContent = ArrayToXml::convert($xmlArray, 'methodCall');
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_ENCODING, "");
