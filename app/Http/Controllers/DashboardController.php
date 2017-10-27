@@ -17,24 +17,31 @@ class DashboardController extends Controller
     {
         $data = [];
 
-        /*$input = array(
+        /*$xmlArray = [
             'methodName' => 'device_token',
-            'params' => array(
-                'para' => array(
-                    0 => array(
+            'params' => [
+                'param1' => [
+                    0 => [
                         'value' => array(
-                            'string' => '1.png'
+                            'string' => 'test'
                         )
-                    ),
-                    1 => array(
-                        'value' => array(
-                            'string' => '1.png'
-                        )
-                    ),
-                )
-            )
-        );
-        print ArrayToXml::convert($input, 'methodCall');*/
+                    ],
+                    1 => [
+                        'value' => [
+                            'string' => 'test1'
+                        ]
+                    ],
+                    2 => [
+                        'value' => [
+                            'string' => 'test2'
+                        ]
+                    ],
+                ]
+            ]
+        ];
+
+        $xmlContent = ArrayToXml::convert($xmlArray, 'methodCall');
+        print_r( $xmlContent);*/
 
         return view('dashboard.index', $data);
     }

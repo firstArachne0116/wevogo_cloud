@@ -275,26 +275,24 @@ class WevoUsersController extends Controller
         $deviceType = $wevoUser->wevoDevice->device_type;
 
         $xmlArray = [
-            'methodCall' => [
-                'methodName' => 'device_token',
-                'params' => [
-                    'param1' => [
-                        0 => [
-                            'value' => array(
-                                'string' => $deviceUserName
-                            )
-                        ],
-                        1 => [
-                            'value' => [
-                                'string' => $deviceType
-                            ]
-                        ],
-                        2 => [
-                            'value' => [
-                                'string' => $deviceToken
-                            ]
-                        ],
-                    ]
+            'methodName' => 'device_token',
+            'params' => [
+                'param1' => [
+                    0 => [
+                        'value' => array(
+                            'string' => $deviceUserName
+                        )
+                    ],
+                    1 => [
+                        'value' => [
+                            'string' => $deviceType
+                        ]
+                    ],
+                    2 => [
+                        'value' => [
+                            'string' => $deviceToken
+                        ]
+                    ],
                 ]
             ]
         ];
