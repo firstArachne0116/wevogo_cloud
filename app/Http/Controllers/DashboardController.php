@@ -42,6 +42,9 @@ class DashboardController extends Controller
 
         $xmlContent = ArrayToXml::convert($xmlArray, 'methodCall');
         print_r( $xmlContent);*/
+        /*$statusCode = 200;
+        $content = view('api_response', compact('statusCode'))->render();
+        print_r($content);*/
 
         return view('dashboard.index', $data);
     }

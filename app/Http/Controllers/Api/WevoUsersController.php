@@ -91,7 +91,7 @@ class WevoUsersController extends Controller
                 else
                     $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
 
-            } else if ($requests['methodName'] === 'create_phone_account') {
+            } else if ($requests['methodName'] === 'create_phone_account') { /* register account from app */
                 /*return response()->xml(User::all());*/
                 $params = $requests['params']['param'];
                 $phoneNumber = $params[0]['value']['string'];
@@ -102,7 +102,6 @@ class WevoUsersController extends Controller
                 if ($wevoUser === null) {
                     $statusCode = 'OK';
                     $wevoUser = new WevoUser;
-                    $wevoUser->wevo_user_id = 1;
                     $wevoUser->wevo_server_id = 1;
                     $wevoUser->email = $email;
                     $wevoUser->phone_number = $phoneNumber;
@@ -152,6 +151,7 @@ class WevoUsersController extends Controller
     public function create(Request $request)
     {
         $requests = $request->all();
+        Log::debug($requests);
         if (isset($requests['methodName'])) {
             if ($requests['methodName'] === 'wevo_user_info') {
                 /*return response()->xml(User::all());*/
@@ -176,7 +176,7 @@ class WevoUsersController extends Controller
 
                 $wevoUser->extension = $extension;
                 $wevoUser->display_name = $displayName;
-                $wevoUser->wevopbx_local_domain = $wevopbxLocalDomain . ':26060';
+                $wevoUser->wevopbx_local_domain = $wevopbxLocalDomain;
                 $wevoUser->wevopbx_domain = $wevopbxDomain;
 
                 $wevoUser->save();
