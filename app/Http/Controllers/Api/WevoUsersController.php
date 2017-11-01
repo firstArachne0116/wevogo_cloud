@@ -376,9 +376,11 @@ class WevoUsersController extends Controller
         fclose($fp);
 
         if (!$result)
-            return 'Message not delivered' . PHP_EOL;
+            Log::debug('Message not delivered' . PHP_EOL);
         else
-            return 'Message successfully delivered' . PHP_EOL;
+            Log::debug('Message successfully delivered' . PHP_EOL);
+
+        return;
     }
 
     public function sendDeviceTokenToPbx($wevoUser)
