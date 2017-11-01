@@ -169,7 +169,7 @@ class WevoUsersController extends Controller
                     $wevoUser = new WevoUser;
                     $wevoUser->email = $email;
                     $wevoUser->phone_number = $phoneNumber;
-                    $wevoUser->wevo_server_id = $wevoServerId;
+
 
                 }
 
@@ -181,7 +181,8 @@ class WevoUsersController extends Controller
                 $wevoUser->display_name = $displayName;
                 $wevoUser->wevopbx_local_domain = $wevopbxLocalDomain;
                 $wevoUser->wevopbx_domain = $wevopbxDomain;
-
+                $wevoUser->wevo_server_id = $wevoServerId;
+                
                 $wevoUser->save();
 
                 $wevoDevice->wevo_user_id = $wevoUser->id;
