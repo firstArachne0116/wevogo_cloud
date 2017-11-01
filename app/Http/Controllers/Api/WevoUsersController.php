@@ -279,11 +279,14 @@ class WevoUsersController extends Controller
         $requests = $request->all();
          Log::debug($requests);
         if (isset($requests['methodName'])) {
-            if ($requests['methodName'] === 'is_phone_number_used') {
+            if ($requests['methodName'] === 'push_notify') {
                 /*return response()->xml(User::all());*/
                 $params = $requests['params']['param'];
                 $userExtension = $params[0]['value']['string'];
-                $wevoUser = WevoUser::where('extension', $userExtension)->first();
+                $wevoServerId = $params[1]['value']['string'];
+                $callId = $params[2]['value']['string'];
+                $wevoUser = WevoUser::where('extension', $userExtension)
+                    ->where('wevo_server_id', $wevoServerId)->first();
                 if ($wevoUser !== null) {
                     if ($wevoUser->wevoDevice->device_type === 'android')
                         $this->sendPNToAndroid($wevoUser);
@@ -332,7 +335,49 @@ class WevoUsersController extends Controller
 
     public function sendPNToIphone($wevoUser)
     {
+        $deviceToken = '32d0273184c70e13a0b0c24d2e29d7bfe4310b9d5691580b46fbc87eda093adb';
+        $ctx = stream_context_create();
 
+        // ck.pem is your certificate file
+        stream_context_set_option($ctx, 'ssl', 'local_cert', 'apns-prod.pem');
+        stream_context_set_option($ctx, 'ssl', 'passphrase', 'wevo0123');
+
+        // Open a connection to the APNS server
+        $fp = stream_socket_client(
+            'ssl://gateway.push.apple.com:2195', $err,
+            $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+        if (!$fp)
+            exit("Failed to connect: $err $errstr" . PHP_EOL);
+
+        // Create the payload body
+        $body['aps'] = array(
+            'alert' => array(
+                'title' => 'this is test push',
+                'body' => 'test',
+            ),
+            'sound' => 'default',
+            'call-id' => '',
+            'loc-key' => 'IC_MSG',
+            'category' => '',
+            'content-available' => 1
+        );
+
+        // Encode the payload as JSON
+        $payload = json_encode($body);
+
+        // Build the binary notification
+        $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+
+        // Send it to the server
+        $result = fwrite($fp, $msg, strlen($msg));
+
+        // Close the connection to the server
+        fclose($fp);
+
+        if (!$result)
+            return 'Message not delivered' . PHP_EOL;
+        else
+            return 'Message successfully delivered' . PHP_EOL;
     }
 
     public function sendDeviceTokenToPbx($wevoUser)

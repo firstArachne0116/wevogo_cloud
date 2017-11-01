@@ -4,7 +4,6 @@
 @endsection
 
 @section('content')
-    {{ var_dump(config('services.wevopbx_url')) }}
 @stop
 
 @section('custom-scripts')
