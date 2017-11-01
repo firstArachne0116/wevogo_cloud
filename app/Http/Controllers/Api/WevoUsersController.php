@@ -300,7 +300,6 @@ class WevoUsersController extends Controller
     {
 
         $deviceToken = $wevoUser->wevoDevice->device_token;
-        Log::debug($deviceToken);
         $msg = array
         (
             'body'         => 'Body  Of Notification',
@@ -336,11 +335,11 @@ class WevoUsersController extends Controller
 
     public function sendPNToIphone($wevoUser)
     {
-        $deviceToken = '32d0273184c70e13a0b0c24d2e29d7bfe4310b9d5691580b46fbc87eda093adb';
+        $deviceToken = $wevoUser->wevoDevice->device_token;
         $ctx = stream_context_create();
 
         // ck.pem is your certificate file
-        stream_context_set_option($ctx, 'ssl', 'local_cert', 'apns-prod.pem');
+        stream_context_set_option($ctx, 'ssl', 'local_cert', public_path('cert/apns-dev-new.pem'));
         stream_context_set_option($ctx, 'ssl', 'passphrase', 'wevo0123');
 
         // Open a connection to the APNS server
