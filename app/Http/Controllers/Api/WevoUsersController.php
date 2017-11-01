@@ -277,7 +277,6 @@ class WevoUsersController extends Controller
     {
         $statusCode = '';
         $requests = $request->all();
-         Log::debug($requests);
         if (isset($requests['methodName'])) {
             if ($requests['methodName'] === 'push_notify') {
                 /*return response()->xml(User::all());*/
@@ -299,7 +298,9 @@ class WevoUsersController extends Controller
 
     public function sendPNToAndroid($wevoUser)
     {
+
         $deviceToken = $wevoUser->wevoDevice->device_token;
+        Log::debug($deviceToken);
         $msg = array
         (
             'body'         => 'Body  Of Notification',
