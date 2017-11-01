@@ -71,15 +71,18 @@ class WevoUsersController extends Controller
                 if ($wevoUser !== null) {
                     $wevoUser->is_verified = true;
                     $wevoUser->save();
-                    if ($wevoUser->wevoDevice !== null) {
-                        $wevoDevice = $wevoUser->wevoDevice;
-                        $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain;
-                        $wevoDevice->device_type = $deviceType;
-                        $wevoDevice->device_token = $deviceToken;
-                        $wevoDevice->save();
+                    if ($wevoUser->wevoDevice === null) {
+                        $wevoDevice = new WevoDevice;
+                        $wevoDevice->wevo_user_id = $wevoUser->id;
+                    } else $wevoDevice = $wevoUser->wevoDevice;
 
-                        $this->sendDeviceTokenToPbx($wevoUser);
-                    } else $statusCode = ',,';
+                    $wevoDevice->device_type = $deviceType;
+                    $wevoDevice->device_token = $deviceToken;
+                    $wevoDevice->save();
+
+                    $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain;
+                    $this->sendDeviceTokenToPbx($wevoUser);
+
                 } else $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
             } else if ($requests['methodName'] === 'get_phone_number_for_account') {
                 /*return response()->xml(User::all());*/
@@ -182,7 +185,7 @@ class WevoUsersController extends Controller
                 $wevoUser->wevopbx_local_domain = $wevopbxLocalDomain;
                 $wevoUser->wevopbx_domain = $wevopbxDomain;
                 $wevoUser->wevo_server_id = $wevoServerId;
-                
+
                 $wevoUser->save();
 
                 $wevoDevice->wevo_user_id = $wevoUser->id;
