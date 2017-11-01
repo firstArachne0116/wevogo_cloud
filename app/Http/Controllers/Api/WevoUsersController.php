@@ -81,7 +81,8 @@ class WevoUsersController extends Controller
                     $wevoDevice->save();
 
                     $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain;
-                    $this->sendDeviceTokenToPbx($wevoUser);
+                    if ($wevoUser->extension != '')
+                        $this->sendDeviceTokenToPbx($wevoUser);
 
                 } else $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
             } else if ($requests['methodName'] === 'get_phone_number_for_account') {
