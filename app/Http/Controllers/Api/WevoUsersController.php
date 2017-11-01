@@ -61,7 +61,7 @@ class WevoUsersController extends Controller
                 } else
                     $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
             } else if ($requests['methodName'] === 'activate_phone_account') {
-                Log::debug($requests);
+
                 $params = $requests['params']['param'];
                 $phoneNumber = $params[0]['value']['string'];
                 $rememberToken = $params[2]['value']['string'];
@@ -69,16 +69,17 @@ class WevoUsersController extends Controller
                 $deviceToken = $params[4]['value']['string'];
                 $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('remember_token', $rememberToken)->first();
                 if ($wevoUser !== null) {
-                    $wevoDevice = $wevoUser->wevoDevice;
-                    $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain;
                     $wevoUser->is_verified = true;
                     $wevoUser->save();
+                    if ($wevoUser->wevoDevice !== null) {
+                        $wevoDevice = $wevoUser->wevoDevice;
+                        $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain;
+                        $wevoDevice->device_type = $deviceType;
+                        $wevoDevice->device_token = $deviceToken;
+                        $wevoDevice->save();
 
-                    $wevoDevice->device_type = $deviceType;
-                    $wevoDevice->device_token = $deviceToken;
-                    $wevoDevice->save();
-
-                    $this->sendDeviceTokenToPbx($wevoUser);
+                        $this->sendDeviceTokenToPbx($wevoUser);
+                    } else $statusCode = ',,';
                 } else $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
             } else if ($requests['methodName'] === 'get_phone_number_for_account') {
                 /*return response()->xml(User::all());*/
@@ -102,7 +103,7 @@ class WevoUsersController extends Controller
                 if ($wevoUser === null) {
                     $statusCode = 'OK';
                     $wevoUser = new WevoUser;
-                    $wevoUser->wevo_server_id = 1;
+                    $wevoUser->wevo_server_id = -1;
                     $wevoUser->email = $email;
                     $wevoUser->phone_number = $phoneNumber;
                     $wevoUser->save();
@@ -127,7 +128,6 @@ class WevoUsersController extends Controller
                     $statusCode = 'ERROR_ACCOUNT_ALREADY_IN_USE';
 
             } else if ($requests['methodName'] === 'get_provision_settings') {
-                Log::debug($request->all());
                 $params = $requests['params']['param'];
                 $phoneNumber = $params['value']['string'];
                 $wevoUser = WevoUser::where('phone_number', $phoneNumber)->first();
@@ -151,7 +151,6 @@ class WevoUsersController extends Controller
     public function create(Request $request)
     {
         $requests = $request->all();
-        Log::debug($requests);
         if (isset($requests['methodName'])) {
             if ($requests['methodName'] === 'wevo_user_info') {
                 /*return response()->xml(User::all());*/
@@ -262,6 +261,68 @@ class WevoUsersController extends Controller
                     ->header('Content-Type', 'text/xml');
             }
         }
+
+    }
+
+    public function pushNotification(Request $request)
+    {
+        $statusCode = '';
+        $requests = $request->all();
+        /* Log::debug($requests);*/
+        if (isset($requests['methodName'])) {
+            if ($requests['methodName'] === 'is_phone_number_used') {
+                /*return response()->xml(User::all());*/
+                $params = $requests['params']['param'];
+                $userExtension = $params[0]['value']['string'];
+                $wevoUser = WevoUser::where('extension', $userExtension)->first();
+                if ($wevoUser !== null) {
+                    if ($wevoUser->wevoDevice->device_type === 'android')
+                        $this->sendPNToAndroid($wevoUser);
+                    else $this->sendPNToIphone($wevoUser);
+                }
+
+            }
+        }
+    }
+
+    public function sendPNToAndroid($wevoUser)
+    {
+        $deviceToken = $wevoUser->wevoDevice->device_token;
+        $msg = array
+        (
+            'body'         => 'Body  Of Notification',
+            'title'        => 'Title Of Notification',
+            'icon'        => 'myicon',/*Default Icon*/
+            'sound' => 'mySound'/*Default sound*/
+        );
+        $fields = array
+        (
+            'to'                => $deviceToken,
+            'priority'  => 'high',
+            'notification'        => $msg
+        );
+
+
+        $headers = array
+        (
+            'Authorization: key=' . config('services.firebase_api_access_key'),
+            'Content-Type: application/json'
+        );
+
+        $ch = curl_init();
+        curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+        curl_setopt( $ch,CURLOPT_POST, true );
+        curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+        curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+        $result = curl_exec($ch );
+        curl_close( $ch );
+
+    }
+
+    public function sendPNToIphone($wevoUser)
+    {
 
     }
 

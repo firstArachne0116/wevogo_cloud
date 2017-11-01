@@ -35,5 +35,6 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
     'wevopbx_url' => env('WEVOPBX_URL'),
+    'firebase_api_access_key' => env('FIREBASE_API_ACCESS_KEY')
 
 ];

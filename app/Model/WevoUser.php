@@ -11,4 +11,9 @@ class WevoUser extends Model
     {
         return $this->hasOne('App\Model\WevoDevice');
     }
+
+    public function wevoServer()
+    {
+        return $this->belongsTo('App\Model\WevoServer');
+    }
 }
