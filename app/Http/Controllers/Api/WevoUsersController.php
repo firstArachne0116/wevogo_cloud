@@ -159,7 +159,7 @@ class WevoUsersController extends Controller
                 $wevopbxDomain = is_array($params[1]['value']['string']) ? '' : $params[1]['value']['string'];
                 $wevopbxLocalDomain = $params[2]['value']['string'];
                 $extension = $params[51]['value']['string'];
-                $phoneNumber = $params[52]['value']['string'];
+                $phoneNumber = '+' . $params[52]['value']['string'];
                 $email = $params[53]['value']['string'];
                 $displayName = $params[54]['value']['string'];
 
@@ -168,7 +168,7 @@ class WevoUsersController extends Controller
                 if ($wevoUser === null) {
                     $wevoUser = new WevoUser;
                     $wevoUser->email = $email;
-                    $wevoUser->phone_number = '+' . $phoneNumber;
+                    $wevoUser->phone_number = $phoneNumber;
                     $wevoUser->wevo_server_id = $wevoServerId;
 
                 }
