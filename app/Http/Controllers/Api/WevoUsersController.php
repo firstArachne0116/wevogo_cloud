@@ -170,8 +170,12 @@ class WevoUsersController extends Controller
                     $wevoUser->email = $email;
                     $wevoUser->phone_number = '+' . $phoneNumber;
                     $wevoUser->wevo_server_id = $wevoServerId;
-                    $wevoDevice = new WevoDevice;
-                } else $wevoDevice = $wevoUser->wevoDevice;
+
+                }
+
+                if ($wevoUser->wevoDevice !== null)
+                    $wevoDevice = $wevoUser->wevoDevice;
+                else $wevoDevice = new WevoDevice;
 
                 $wevoUser->extension = $extension;
                 $wevoUser->display_name = $displayName;
