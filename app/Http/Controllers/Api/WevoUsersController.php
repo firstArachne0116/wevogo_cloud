@@ -336,6 +336,7 @@ class WevoUsersController extends Controller
     public function sendPNToIphone($wevoUser)
     {
         $deviceToken = $wevoUser->wevoDevice->device_token;
+        Log::debug($deviceToken);
         $ctx = stream_context_create();
 
         // ck.pem is your certificate file
