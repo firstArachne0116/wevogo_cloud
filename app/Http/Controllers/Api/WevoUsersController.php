@@ -289,7 +289,7 @@ class WevoUsersController extends Controller
                 if ($wevoUser !== null) {
                     if ($wevoUser->wevoDevice->device_type === 'android')
                         $this->sendPNToAndroid($wevoUser);
-                    else $this->sendPNToIphone($wevoUser);
+                    else $this->sendPNToIphone($wevoUser, $callId);
                 }
 
             }
@@ -333,7 +333,7 @@ class WevoUsersController extends Controller
 
     }
 
-    public function sendPNToIphone($wevoUser)
+    public function sendPNToIphone($wevoUser, $callId)
     {
         $deviceToken = $wevoUser->wevoDevice->device_token;
         Log::debug($deviceToken);
@@ -357,7 +357,7 @@ class WevoUsersController extends Controller
                 'body' => 'test',
             ),
             'sound' => 'default',
-            'call-id' => '',
+            'call-id' => $callId,
             'loc-key' => 'IC_MSG',
             'category' => '',
             'content-available' => 1
