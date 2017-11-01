@@ -277,7 +277,7 @@ class WevoUsersController extends Controller
     {
         $statusCode = '';
         $requests = $request->all();
-        /* Log::debug($requests);*/
+         Log::debug($requests);
         if (isset($requests['methodName'])) {
             if ($requests['methodName'] === 'is_phone_number_used') {
                 /*return response()->xml(User::all());*/
