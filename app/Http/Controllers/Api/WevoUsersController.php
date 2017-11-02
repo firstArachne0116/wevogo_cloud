@@ -340,12 +340,12 @@ class WevoUsersController extends Controller
         $ctx = stream_context_create();
 
         // ck.pem is your certificate file
-        stream_context_set_option($ctx, 'ssl', 'local_cert', public_path('cert/apns-dev-new.pem'));
+        stream_context_set_option($ctx, 'ssl', 'local_cert', public_path('cert/apns-prod.pem'));
         stream_context_set_option($ctx, 'ssl', 'passphrase', 'wevo0123');
 
         // Open a connection to the APNS server
         $fp = stream_socket_client(
-            'ssl://gateway.sandbox.push.apple.com:2195', $err,
+            'ssl://gateway.push.apple.com:2195', $err,
             $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
         if (!$fp)
             exit("Failed to connect: $err $errstr" . PHP_EOL);
