@@ -284,26 +284,28 @@ class WevoUsersController extends Controller
                 $userExtension = $params[0]['value']['string'];
                 $wevoServerId = $params[1]['value']['string'];
                 $callId = $params[2]['value']['string'];
+                $messageTitle = $params[3]['value']['string'];
+                $messageBody = $params[4]['value']['string'];
                 $wevoUser = WevoUser::where('extension', $userExtension)
                     ->where('wevo_server_id', $wevoServerId)->first();
                 if ($wevoUser !== null) {
                     if ($wevoUser->wevoDevice->device_type === 'android')
-                        $this->sendPNToAndroid($wevoUser);
-                    else $this->sendPNToIphone($wevoUser, $callId);
+                        $this->sendPNToAndroid($wevoUser, $messageTitle, $messageBody);
+                    else $this->sendPNToIphone($wevoUser, $callId, $messageTitle, $messageBody);
                 }
 
             }
         }
     }
 
-    public function sendPNToAndroid($wevoUser)
+    public function sendPNToAndroid($wevoUser, $messageTitle, $messageBody)
     {
 
         $deviceToken = $wevoUser->wevoDevice->device_token;
         $msg = array
         (
-            'body'         => 'Body  Of Notification',
-            'title'        => 'Title Of Notification',
+            'body'         => $messageBody,
+            'title'        => $messageTitle,
             'icon'        => 'myicon',/*Default Icon*/
             'sound' => 'mySound'/*Default sound*/
         );
@@ -333,10 +335,10 @@ class WevoUsersController extends Controller
 
     }
 
-    public function sendPNToIphone($wevoUser, $callId)
+    public function sendPNToIphone($wevoUser, $callId, $messageTitle, $messageBody)
     {
         $deviceToken = $wevoUser->wevoDevice->device_token;
-        Log::debug($deviceToken);
+        /*Log::debug($deviceToken);*/
         $ctx = stream_context_create();
 
         // ck.pem is your certificate file
@@ -353,8 +355,8 @@ class WevoUsersController extends Controller
         // Create the payload body
         $body['aps'] = array(
             'alert' => array(
-                'title' => 'this is test push',
-                'body' => 'test',
+                'title' => $messageTitle,
+                'body' => $messageBody,
             ),
             'sound' => 'default',
             'call-id' => $callId,
