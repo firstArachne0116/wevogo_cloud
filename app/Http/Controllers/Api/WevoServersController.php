@@ -13,7 +13,6 @@ class WevoServersController extends Controller
 
     public function create(Request $request) {
         $requests = $request->all();
-         Log::debug($requests);
         if (isset($requests['methodName'])) {
             if ($requests['methodName'] === 'server_register') {
                 /*return response()->xml(User::all());*/

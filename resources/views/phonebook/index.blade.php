@@ -40,9 +40,6 @@
 
             {{ Form::close() }}
         </div>
-        <a href="{{ route('phonebook.create') }}" class="btn btn-primary pull-right m-b-sm">
-            <i class="fa fa-plus"></i>
-            Add </a>
         <div class="ibox float-e-margins">
             <div class="ibox-title text-right">
                 <h5>

@@ -20,15 +20,15 @@ class CreatePhonebookContacts extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('gender')->nullable();
-            $table->string('mobile_number');
+            $table->string('mobile_number')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();
             $table->string('postal_code');
             $table->string('country')->nullable();
             $table->string('extension')->index();
-            $table->string('email');
-            $table->integer('department_id');
+            $table->string('email')->nullable();
+            $table->integer('department_id')->nullable();
             $table->string('company_id')->nullable();
             $table->string('accessibility')->nullable();
             $table->smallInteger('stage')->nullable();
