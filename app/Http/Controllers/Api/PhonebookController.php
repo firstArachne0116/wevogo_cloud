@@ -10,8 +10,16 @@ use Illuminate\Support\Facades\Log;
 class PhonebookController extends Controller
 {
     //
+    public function index()
+    {
+
+        /* response to phone */
+        $phonebooks = PbContact::all();
+        return response()->json($phonebooks, 200);
+    }
     public function store(Request $request)
     {
+        /* receive from phonebook */
         $pbContact = PbContact::where('contact_id', $request->get('Contact_ID'))
             ->where('wevo_server_id', $request->get('wevo_server_id'))->first();
         if ($pbContact === null)

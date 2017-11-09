@@ -85,6 +85,10 @@
 						<a href="{!! URL::route('wevo-users.index') !!}"><i class="fa fa-life-bouy"></i>
 							<span class="nav-label">Wevogo Users</span></a>
 					</li>
+					<li class="{{active_class($controller, 'PhonebookController')}}">
+						<a href="{!! URL::route('phonebook.index') !!}"><i class="fa fa-book"></i>
+							<span class="nav-label">Phone Book</span></a>
+					</li>
 				</ul>
 
 			</div>

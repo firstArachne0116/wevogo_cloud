@@ -37,7 +37,7 @@
                         <thead>
                         <tr>
                             <th>Date Time</th>
-                            <th>Mact Address</th>
+                            <th>Mac Address</th>
                             <th>SN</th>
                             <th>Created At</th>
                             <th>Action+</th>

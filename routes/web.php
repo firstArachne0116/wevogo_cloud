@@ -15,6 +15,8 @@ Route::resource('/dashboard', 'DashboardController', ['only' => ['index', 'store
 Route::resource('users', 'UsersController');
 Route::resource('wevo-users', 'WevoUsersController');
 Route::resource('wevo-servers', 'WevoServersController');
+Route::resource('phonebook', 'PhonebookController');
+Route::get('phonebook/sync', 'PhonebookController@sync')->name('phonebook.sync');
 
 Auth::routes();
 

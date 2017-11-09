@@ -47,6 +47,9 @@
                         @endforeach
                         </tbody>
                     </table>
+                    <div class="text-right">
+                        {{ $wevoUsers->links() }}
+                    </div>
                 @endif
             </div>
         </div>
