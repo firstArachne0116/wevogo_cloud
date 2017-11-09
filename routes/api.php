@@ -26,4 +26,5 @@ Route::group(['middleware' => ['api', 'xml']], function() {
 
 Route::group(['middleware' => ['api']], function() {
     Route::delete('/wevo-users/{id}/delete', 'Api\WevoUsersController@destroy');
+    Route::resource('phonebook', 'Api\PhonebookController');
 });
