@@ -439,8 +439,15 @@ class WevoUsersController extends Controller
         curl_close($ch);
     }
 
-    public function destroy($extension)
+    public function destroy(Request $request, $extension)
     {
-        WevoUser::where('extension', $extension)->delete();
+      $requests = $request->all();
+     /* Log::debug($requests);*/
+      if (isset($requests['methodName'])) {
+              /*return response()->xml(User::all());*/
+        $params = $requests['params']['param'];
+        $wevoServerId = $params[0]['value']['string'];
+      }
+      WevoUser::where('extension', $extension)->where('wevo_server_id', $wevoServerId)->delete();
     }
 }
