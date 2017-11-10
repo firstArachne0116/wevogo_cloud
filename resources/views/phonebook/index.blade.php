@@ -6,7 +6,7 @@
 @section('content')
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>Wevogo Servers</h2>
+            <h2>Phone Book</h2>
             <ol class="breadcrumb">
                 <li>
                     <a href="{{URL::route('dashboard.index')}}">Home</a>

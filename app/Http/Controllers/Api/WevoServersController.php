@@ -21,7 +21,7 @@ class WevoServersController extends Controller
                 $serialNumber = $params[1]['value']['string'];
                 $dateTime = $params[2]['value']['string'];
                 $domain = $params[3]['value']['string'];
-                $wevoServer = WevoServer::where('mac_address', $macAddress)->where('sn', $serialNumber)->first();
+                $wevoServer = WevoServer::where('mac_address', $macAddress)->first();
 
                 if ($wevoServer === null)
                     $wevoServer = new WevoServer;
