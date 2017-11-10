@@ -22,9 +22,9 @@ Route::group(['middleware' => ['api', 'xml']], function() {
     Route::post('/wevo-users/create', 'Api\WevoUsersController@create');
     Route::post('/wevo-users/push_notification', 'Api\WevoUsersController@pushNotification');
     Route::post('/wevo-servers/create', 'Api\WevoServersController@create');
+    Route::delete('/wevo-users/{id}/delete', 'Api\WevoUsersController@destroy');
 });
 
 Route::group(['middleware' => ['api']], function() {
-    Route::delete('/wevo-users/{id}/delete', 'Api\WevoUsersController@destroy');
     Route::resource('phonebook', 'Api\PhonebookController');
 });
