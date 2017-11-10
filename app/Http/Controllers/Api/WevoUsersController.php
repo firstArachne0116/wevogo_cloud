@@ -446,7 +446,7 @@ class WevoUsersController extends Controller
       if (isset($requests['methodName'])) {
               /*return response()->xml(User::all());*/
         $params = $requests['params']['param'];
-        $wevoServerId = $params[0]['value']['string'];
+        $wevoServerId = $params['value']['string'];
       }
       WevoUser::where('extension', $extension)->where('wevo_server_id', $wevoServerId)->delete();
     }
