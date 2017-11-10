@@ -53,7 +53,7 @@ class PhonebookController extends Controller
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_URL, $wevoServer->domain . "/api/phonebook");
+        curl_setopt($ch, CURLOPT_URL, $wevoServer->domain . "/Phonebook/api/phonebook");
 
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
