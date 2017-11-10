@@ -442,7 +442,6 @@ class WevoUsersController extends Controller
     public function destroy(Request $request, $extension)
     {
       $requests = $request->all();
-      Log::debug($requests);
       if (isset($requests['methodName'])) {
               /*return response()->xml(User::all());*/
         $params = $requests['params']['param'];
