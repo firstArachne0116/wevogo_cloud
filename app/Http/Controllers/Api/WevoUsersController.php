@@ -449,4 +449,11 @@ class WevoUsersController extends Controller
       }
       WevoUser::where('extension', $extension)->where('wevo_server_id', $wevoServerId)->delete();
     }
+
+    public function getPhoneSettings(Request $request)
+    {
+        $phoneNumber= $request->get('phoneNumber');
+        $wevoUser = Wevouser::where('phone_number', $phoneNumber)->first();
+        return response()->json($wevoUser->wevoDevice, 200);
+    }
 }

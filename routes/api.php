@@ -27,4 +27,5 @@ Route::group(['middleware' => ['api', 'xml']], function() {
 
 Route::group(['middleware' => ['api']], function() {
     Route::resource('phonebook', 'Api\PhonebookController');
+    Route::post('wevo-users/get-phone-settings', 'Api\WevoUsersController@getPhoneSettings');
 });
