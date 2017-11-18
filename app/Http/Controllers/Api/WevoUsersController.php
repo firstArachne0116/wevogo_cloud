@@ -452,8 +452,10 @@ class WevoUsersController extends Controller
 
     public function getPhoneSettings(Request $request)
     {
-        $phoneNumber= $request->get('phoneNumber');
+        $phoneNumber = $request->get('phoneNumber');
         $wevoUser = Wevouser::where('phone_number', $phoneNumber)->first();
-        return response()->json($wevoUser->wevoDevice, 200);
+        if ($wevoUser !== null)
+            return response()->json($wevoUser->wevoDevice, 200);
+        else return response()->json('none', 200);
     }
 }
