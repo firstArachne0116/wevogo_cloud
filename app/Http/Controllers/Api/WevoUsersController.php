@@ -455,7 +455,7 @@ class WevoUsersController extends Controller
         $phoneNumber = $request->get('phoneNumber');
         $wevoUser = WevoUser::where('phone_number', $phoneNumber)->first();
         if ($wevoUser !== null)
-            return response()->json($wevoUser->wevoDevice, 200);
+            return response()->json($wevoUser->load('wevoDevice'), 200);
         else return response()->json('none', 200);
     }
 }
