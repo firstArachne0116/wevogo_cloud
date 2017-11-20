@@ -454,8 +454,21 @@ class WevoUsersController extends Controller
     {
         $phoneNumber = $request->get('phoneNumber');
         $wevoUser = WevoUser::where('phone_number', $phoneNumber)->first();
-        if ($wevoUser !== null)
-            return response()->json($wevoUser->load('wevoDevice'), 200);
+        if ($wevoUser !== null) {
+            $jsonData = $wevoUser->load('wevoDevice');
+            if (trim($jsonData->wevoDevice->acc_auth) == "\"\"") $jsonData->wevoDevice->acc_auth = null;
+            if (trim($jsonData->wevoDevice->acc_proxy) == "\"\"") $jsonData->wevoDevice->acc_proxy = null;
+            if (trim($jsonData->wevoDevice->acc_prefix) == "\"\"") $jsonData->wevoDevice->acc_prefix = null;
+            if (trim($jsonData->wevoDevice->net_dmode_enable) == "\"\"") $jsonData->wevoDevice->net_dmode_enable = null;
+            if (trim($jsonData->wevoDevice->net_stun_turn_server) == "\"\"") $jsonData->wevoDevice->net_stun_turn_server = null;
+            if (trim($jsonData->wevoDevice->net_stun_turn_uname) == "\"\"") $jsonData->wevoDevice->net_stun_turn_uname = null;
+            if (trim($jsonData->wevoDevice->net_stun_turn_pass) == "\"\"") $jsonData->wevoDevice->net_stun_turn_pass = null;
+            if (trim($jsonData->wevoDevice->net_sip_port) == "\"\"") $jsonData->wevoDevice->net_sip_port = null;
+            if (trim($jsonData->wevoDevice->adv_pa_dname) == "\"\"") $jsonData->wevoDevice->adv_pa_dname = null;
+            if (trim($jsonData->wevoDevice->adv_pa_uname) == "\"\"") $jsonData->wevoDevice->adv_pa_uname = null;
+
+            return response()->json($jsonData, 200);
+        }
         else return response()->json('none', 200);
     }
 }
