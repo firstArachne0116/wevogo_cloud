@@ -342,7 +342,7 @@ class WevoUsersController extends Controller
         $ctx = stream_context_create();
 
         // ck.pem is your certificate file
-        stream_context_set_option($ctx, 'ssl', 'local_cert', public_path('cert/apns-prod.pem'));
+        stream_context_set_option($ctx, 'ssl', 'local_cert', public_path('cert/VOIP.pem'));
         stream_context_set_option($ctx, 'ssl', 'passphrase', 'wevo0123');
 
         // Open a connection to the APNS server
