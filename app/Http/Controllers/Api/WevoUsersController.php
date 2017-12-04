@@ -80,7 +80,7 @@ class WevoUsersController extends Controller
                     $wevoDevice->device_token = $deviceToken;
                     $wevoDevice->save();
 
-                    $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain;
+                    $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain . ',' . $wevoUser->wevopbx_domain;
                     if ($wevoUser->extension != '')
                         $this->sendDeviceTokenToPbx($wevoUser);
 
@@ -141,7 +141,7 @@ class WevoUsersController extends Controller
                     $statusCode = 'ERROR_ACCOUNT_IS_NOT_PROVISIONED_YET';
                 } else {
                     $wevoDevice = $wevoUser->wevoDevice;
-                    $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain;
+                    $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain . ',' . $wevoUser->wevopbx_domain;
                 }
 
             }
