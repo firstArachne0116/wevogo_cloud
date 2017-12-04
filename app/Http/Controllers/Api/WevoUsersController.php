@@ -206,7 +206,8 @@ class WevoUsersController extends Controller
                 $wevoDevice->audio_adp_rate_enable = $params[16]['value']['string'];
                 $wevoDevice->audio_codec_rate_lim = $params[17]['value']['string'];
                 $wevoDevice->audio_codec = $params[18]['value']['string'];
-                $wevoDevice->video_enable = $params[19]['value']['string'];
+//                $wevoDevice->video_enable = $params[19]['value']['string'];
+                $wevoDevice->video_enable = 0;
                 $wevoDevice->video_always_initiate = $params[20]['value']['string'];
                 $wevoDevice->video_always_accept = $params[21]['value']['string'];
                 $wevoDevice->video_preset = $params[22]['value']['string'];
