@@ -305,16 +305,13 @@ class WevoUsersController extends Controller
         $deviceToken = $wevoUser->wevoDevice->device_token;
         $msg = array
         (
-            'body'         => $messageBody,
-            'title'        => $messageTitle,
-            'icon'        => 'myicon',/*Default Icon*/
-            'sound' => 'mySound'/*Default sound*/
+            'pn_type' => 'incomming call'
         );
         $fields = array
         (
             'to'                => $deviceToken,
             'priority'  => 'high',
-            'notification'        => $msg
+            'data' => $msg
         );
 
 
