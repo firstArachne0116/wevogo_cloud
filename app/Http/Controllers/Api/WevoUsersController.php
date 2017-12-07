@@ -47,11 +47,13 @@ class WevoUsersController extends Controller
                         $rememberToken = generateRandomNumber(4);
                         $message = 'Wevogo says that Your verification code is ' . $rememberToken;
 
-                        Nexmo::message()->send([
-                            'to' => '85590748240',
+                        $response = Nexmo::message()->send([
+                            'to' => $phoneNumber,
                             'from' => 'WevoGo',
                             'text' => $message
                         ]);
+
+                        Log::debug($response);
 
                         $wevoUser->remember_token = $rememberToken;
                         $wevoUser->save();
