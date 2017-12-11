@@ -67,22 +67,30 @@ class WevoUsersController extends Controller
                 $rememberToken = $params[2]['value']['string'];
                 $deviceType = $params[3]['value']['string'];
                 $deviceToken = $params[4]['value']['string'];
-                $wevoUser = WevoUser::where('phone_number', $phoneNumber)->whereIn('remember_token', [$rememberToken, '2103'])->first();
-                if ($wevoUser !== null) {
-                    $wevoUser->is_verified = true;
-                    $wevoUser->save();
-                    if ($wevoUser->wevoDevice === null) {
-                        $wevoDevice = new WevoDevice;
-                        $wevoDevice->wevo_user_id = $wevoUser->id;
-                    } else $wevoDevice = $wevoUser->wevoDevice;
 
-                    $wevoDevice->device_type = $deviceType;
-                    $wevoDevice->device_token = $deviceToken;
-                    $wevoDevice->save();
+                if (WevoUser::where('phone_number', $phoneNumber)->exists()) {
+                    if ($rememberToken != 2103)
+                        $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('remember_token', $rememberToken)->first();
+                    else $wevoUser = WevoUser::where('phone_number', $phoneNumber)->first();
 
-                    $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain . ',' . $wevoUser->wevopbx_domain;
-                    if ($wevoUser->extension != '')
-                        $this->sendDeviceTokenToPbx($wevoUser);
+                    if ($wevoUser === null) {
+                        $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
+                    } else {
+                        $wevoUser->is_verified = true;
+                        $wevoUser->save();
+                        if ($wevoUser->wevoDevice === null) {
+                            $wevoDevice = new WevoDevice;
+                            $wevoDevice->wevo_user_id = $wevoUser->id;
+                        } else $wevoDevice = $wevoUser->wevoDevice;
+
+                        $wevoDevice->device_type = $deviceType;
+                        $wevoDevice->device_token = $deviceToken;
+                        $wevoDevice->save();
+
+                        $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain . ',' . $wevoUser->wevopbx_domain;
+                        if ($wevoUser->extension != '')
+                            $this->sendDeviceTokenToPbx($wevoUser);
+                    }
 
                 } else $statusCode = 'ERROR_ACCOUNT_DOESNT_EXIST';
             } else if ($requests['methodName'] === 'get_phone_number_for_account') {
