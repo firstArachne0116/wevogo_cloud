@@ -20,7 +20,26 @@ class PhonebookController extends Controller
     public function store(Request $request)
     {
         /* receive from phonebook */
-        $pbContact = PbContact::where('contact_id', $request->get('Contact_ID'))
+        $this->savePbContact($request->get('Contact_ID'), $request);
+    }
+
+    public function update($id, Request $request)
+    {
+        $this->savePbContact($id, $request);
+
+    }
+    public function destroy($id, Request $request)
+    {
+        Log::debug($id);
+        PbContact::where('contact_id', $id)
+            ->where('wevo_server_id', $request->get('wevo_server_id'))->delete();
+
+        return response()->json(['result' => 'success'], 200);
+    }
+
+    private function savePbContact($contactId, $request)
+    {
+        $pbContact = PbContact::where('contact_id', $contactId)
             ->where('wevo_server_id', $request->get('wevo_server_id'))->first();
         if ($pbContact === null)
             $pbContact = new PbContact;
@@ -43,6 +62,5 @@ class PhonebookController extends Controller
         $pbContact->wevo_server_id = $request->get('wevo_server_id');
         $pbContact->save();
         Log::debug($request->get('Contact_ID'));
-
     }
 }
