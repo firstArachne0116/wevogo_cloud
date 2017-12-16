@@ -87,7 +87,7 @@ class WevoUsersController extends Controller
                         $wevoDevice->device_token = $deviceToken;
                         $wevoDevice->save();
 
-                        $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain . ',' . $wevoUser->wevopbx_domain;
+                        $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain . ',' . $wevoUser->wevopbx_domain . ',' . $deviceToken;
                         if ($wevoUser->extension != '')
                             $this->sendDeviceTokenToPbx($wevoUser);
                     }
