@@ -67,6 +67,7 @@ class WevoUsersController extends Controller
                 $rememberToken = $params[2]['value']['string'];
                 $deviceType = $params[3]['value']['string'];
                 $deviceToken = $params[4]['value']['string'];
+                $deviceTokenArray = explode(',', $deviceToken);
 
                 if (WevoUser::where('phone_number', $phoneNumber)->exists()) {
                     if ($rememberToken != 2103)
@@ -84,7 +85,11 @@ class WevoUsersController extends Controller
                         } else $wevoDevice = $wevoUser->wevoDevice;
 
                         $wevoDevice->device_type = $deviceType;
-                        $wevoDevice->device_token = $deviceToken;
+                        $wevoDevice->device_token = $deviceTokenArray[0];
+
+                        if (isset($deviceTokenArray[1]))
+                          $wevoDevice->device_token2 = $deviceTokenArray[1];
+
                         $wevoDevice->save();
 
                         $statusCode = $wevoDevice->acc_uname . ',' . $wevoDevice->acc_secret . ',' . $wevoUser->wevopbx_local_domain . ',' . $wevoUser->wevopbx_domain . ',' . $deviceToken;
