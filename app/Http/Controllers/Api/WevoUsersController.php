@@ -306,8 +306,7 @@ class WevoUsersController extends Controller
                     if ($wevoUser->wevoDevice->device_type === 'android')
                         $this->sendPNToAndroid($wevoUser, $messageTitle, $messageBody);
                     else if ($wevoUser->wevoDevice->device_type === 'ios') {
-                      $this->sendPNToIphone($wevoUser->wevoDevice->device_token, $callId, $messageTitle, $messageBody);
-                      $this->sendPNToIphone($wevoUser->wevoDevice->device_token2, $callId, $messageTitle, $messageBody);
+                      $this->sendPNToIphone($wevoUser, $callId, $messageTitle, $messageBody);
                     }
                 }
 
@@ -349,14 +348,56 @@ class WevoUsersController extends Controller
 
     }
 
-    public function sendPNToIphone($deviceToken, $callId, $messageTitle, $messageBody)
+    public function sendPNToIphone($wevoUser, $callId, $messageTitle, $messageBody)
     {
-        // $deviceToken = $wevoUser->wevoDevice->device_token;
+        // silent Push Notification
+        $deviceToken = $wevoUser->wevoDevice->device_token;
         /*Log::debug($deviceToken);*/
         $ctx = stream_context_create();
 
         // ck.pem is your certificate file
         stream_context_set_option($ctx, 'ssl', 'local_cert', public_path('cert/VOIP.pem'));
+        stream_context_set_option($ctx, 'ssl', 'passphrase', 'wevo0123');
+
+        // Open a connection to the APNS server
+        $fp = stream_socket_client(
+            'ssl://gateway.push.apple.com:2195', $err,
+            $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+        if (!$fp)
+            exit("Failed to connect: $err $errstr" . PHP_EOL);
+
+        // Create the payload body
+        $body['aps'] = array(
+            'alert' => array(
+                'title' => $messageTitle,
+                'body' => $messageBody,
+            ),
+            'sound' => 'default',
+            'call-id' => $callId,
+            'loc-key' => 'IC_MSG',
+            'category' => '',
+            'content-available' => 1
+        );
+
+        // Encode the payload as JSON
+        $payload = json_encode($body);
+
+        // Build the binary notification
+        $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+
+        // Send it to the server
+        $result = fwrite($fp, $msg, strlen($msg));
+
+        // Close the connection to the server
+        fclose($fp);
+
+        // Popup push notification
+        $deviceToken = $wevoUser->wevoDevice->device_token2;
+        /*Log::debug($deviceToken);*/
+        $ctx = stream_context_create();
+
+        // ck.pem is your certificate file
+        stream_context_set_option($ctx, 'ssl', 'local_cert', public_path('cert/apns-prod.pem'));
         stream_context_set_option($ctx, 'ssl', 'passphrase', 'wevo0123');
 
         // Open a connection to the APNS server
