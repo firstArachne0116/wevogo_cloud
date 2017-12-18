@@ -305,7 +305,10 @@ class WevoUsersController extends Controller
                 if ($wevoUser !== null) {
                     if ($wevoUser->wevoDevice->device_type === 'android')
                         $this->sendPNToAndroid($wevoUser, $messageTitle, $messageBody);
-                    else $this->sendPNToIphone($wevoUser, $callId, $messageTitle, $messageBody);
+                    else if ($wevoUser->wevoDevice->device_type === 'ios') {
+                      $this->sendPNToIphone($wevoUser->wevoDevice->device_token, $callId, $messageTitle, $messageBody);
+                      $this->sendPNToIphone($wevoUser->wevoDevice->device_token2, $callId, $messageTitle, $messageBody);
+                    }
                 }
 
             }
@@ -346,9 +349,9 @@ class WevoUsersController extends Controller
 
     }
 
-    public function sendPNToIphone($wevoUser, $callId, $messageTitle, $messageBody)
+    public function sendPNToIphone($deviceToken, $callId, $messageTitle, $messageBody)
     {
-        $deviceToken = $wevoUser->wevoDevice->device_token;
+        // $deviceToken = $wevoUser->wevoDevice->device_token;
         /*Log::debug($deviceToken);*/
         $ctx = stream_context_create();
 
