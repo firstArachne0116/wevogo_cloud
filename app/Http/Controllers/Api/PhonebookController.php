@@ -15,7 +15,8 @@ class PhonebookController extends Controller
 
         /* response to phone */
         $phonebooks = PbContact::all();
-        return response()->json($phonebooks, 200);
+        $result['result'] = $phonebooks;
+        return response()->json($result, 200);
     }
     public function store(Request $request)
     {
