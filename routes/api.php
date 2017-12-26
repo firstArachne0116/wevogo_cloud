@@ -26,7 +26,16 @@ Route::group(['middleware' => ['api', 'xml']], function() {
 });
 
 Route::group(['middleware' => ['api']], function() {
-    Route::resource('phonebook', 'Api\PhonebookController');
-    Route::post('wevo-users/get-phone-settings', 'Api\WevoUsersController@getPhoneSettings');
+
+
+    Route::resource('phonebook', 'Api\PhonebookController', ['except' => [
+        'index'
+    ]]);
     Route::post('phonebook/action-history', 'Api\PhonebookController@actionHistory');
+
+    Route::group(['middleware' => ['api_token']], function() {
+        Route::get('phonebook', 'Api\PhonebookController@index');
+        Route::post('wevo-users/get-phone-settings', 'Api\WevoUsersController@getPhoneSettings');
+    });
+
 });
