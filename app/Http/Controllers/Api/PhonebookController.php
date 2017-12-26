@@ -6,6 +6,7 @@ use App\Model\PbContact;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 
 class PhonebookController extends Controller
 {
@@ -21,24 +22,40 @@ class PhonebookController extends Controller
     public function store(Request $request)
     {
         /* receive from phonebook */
-        $this->savePbContact($request->get('Contact_ID'), $request);
+        $this->savePbContact($request->get('Contact_ID'), $request, 'add');
     }
 
     public function update($id, Request $request)
     {
-        $this->savePbContact($id, $request);
+        $this->savePbContact($id, $request, 'edit');
 
     }
     public function destroy($id, Request $request)
     {
-        Log::debug($id);
-        PbContact::where('contact_id', $id)
-            ->where('wevo_server_id', $request->get('wevo_server_id'))->delete();
+        $wevoServerId = $request->get('wevo_server_id');
+        $pbContact = PbContact::where('contact_id', $id)
+            ->where('wevo_server_id', $request->get('wevo_server_id'));
+
+        if ($pbContact->delete())
+            $this->createCronLog($wevoServerId . '/' . 'delete_' . $id);
 
         return response()->json(['result' => 'success'], 200);
     }
 
-    private function savePbContact($contactId, $request)
+    public function actionHistory(Request $request)
+    {
+        $wevoServerId = $request->get('wevo_server_id');
+        $pbxActionHistory = $request->get('action_history');
+
+        if (!file_exists(public_path('pb_cron_history/' . $wevoServerId)))
+            File::makeDirectory(public_path('pb_cron_history/' . $wevoServerId), $mode = 0777, true, true);
+
+        $directory = public_path('pb_cron_history/' . $wevoServerId);
+        $scanned_directory = array_values(array_diff(scandir($directory), array('..', '.')));
+        return response()->json($scanned_directory, 200);
+    }
+
+    private function savePbContact($contactId, $request, $action)
     {
         $pbContact = PbContact::where('contact_id', $contactId)
             ->where('wevo_server_id', $request->get('wevo_server_id'))->first();
@@ -61,7 +78,16 @@ class PhonebookController extends Controller
         $pbContact->accessibility = $request->get('Accessibility');
         $pbContact->stage = $request->get('STAGE');
         $pbContact->wevo_server_id = $request->get('wevo_server_id');
-        $pbContact->save();
-        Log::debug($request->get('Contact_ID'));
+
+        if ($pbContact->save() && $request->get('create_history') === 'yes') {
+            if (!file_exists(public_path('pb_cron_history/' . $pbContact->wevo_server_id)))
+                File::makeDirectory(public_path('pb_cron_history/' . $pbContact->wevo_server_id), $mode = 0777, true, true);
+
+            $this->createCronLog($pbContact->wevo_server_id . '/' . $action . '_' . $pbContact->contact_id);
+        }
+    }
+    private function createCronLog($fileName)
+    {
+        File::put(public_path('pb_cron_history/' . $fileName), 'Log');
     }
 }

@@ -83,6 +83,7 @@ class WevoServersController extends Controller
         $wevoServer->date_time = $request->get('date_time');
         $wevoServer->sn = $request->get('sn');
         $wevoServer->mac_address = $request->get('mac_address');
+        $wevoServer->domain = 'empty';
         $wevoServer->save();
     }
 }

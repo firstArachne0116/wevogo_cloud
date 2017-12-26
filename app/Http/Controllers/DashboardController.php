@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\ArrayToXml\ArrayToXml;
+use Illuminate\Support\Facades\File;
 
 class DashboardController extends Controller
 {
@@ -16,7 +17,14 @@ class DashboardController extends Controller
     public function index()
     {
         $data = [];
-
+        if (!file_exists(public_path('pb_cron_history/1'))) {
+            // path does not exist
+            File::makeDirectory(public_path('pb_cron_history/1'), $mode = 0777, true, true);
+        }
+        $directory = public_path('pb_cron_history/1');
+        $scanned_directory = array_values(array_diff(scandir($directory), array('..', '.')));
+        var_dump($scanned_directory);
+        /*File::put(public_path('pb_cron_history/1/test_1'), 'contents');*/
         /*$xmlArray = [
             'methodName' => 'device_token',
             'params' => [
