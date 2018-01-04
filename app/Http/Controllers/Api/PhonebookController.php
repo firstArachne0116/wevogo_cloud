@@ -57,7 +57,7 @@ class PhonebookController extends Controller
 
     public function syncAll(Request $request)
     {
-        Log::debug( $request->get('contacts'));
+        Log::debug( $request->all());
         $wevoServerId = $request->get('wevo_server_id');
         $contacts = $request->get('contacts');
         PbContact::truncate();
