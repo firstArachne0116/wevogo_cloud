@@ -32,10 +32,13 @@ Route::group(['middleware' => ['api']], function() {
         'index'
     ]]);
     Route::post('phonebook/action-history', 'Api\PhonebookController@actionHistory');
-
+    Route::post('phonebook/sync-all', 'Api\PhonebookController@syncAll');
+    
     Route::group(['middleware' => ['api_token']], function() {
         Route::get('phonebook', 'Api\PhonebookController@index');
+
         Route::post('wevo-users/get-phone-settings', 'Api\WevoUsersController@getPhoneSettings');
+
     });
 
 });
