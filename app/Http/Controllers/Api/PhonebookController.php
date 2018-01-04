@@ -76,7 +76,7 @@ class PhonebookController extends Controller
             $pbContact->extension = $contact['Extension'];
             $pbContact->email = $contact['Email'];
             $pbContact->department_id = $contact['Department_ID'];
-            $pbContact->company_id = $contact['Company_ID'];
+            /*$pbContact->company_id = $contact['Company_ID'];*/
             $pbContact->accessibility = $contact['Accessibility'];
             $pbContact->stage = $contact['STAGE'];
             $pbContact->wevo_server_id = $wevoServerId;
