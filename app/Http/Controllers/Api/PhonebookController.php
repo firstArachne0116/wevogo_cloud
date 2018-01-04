@@ -111,7 +111,7 @@ class PhonebookController extends Controller
         $pbContact->extension = $request->get('Extension');
         $pbContact->email = $request->get('Email');
         $pbContact->department_id = $request->get('Department_ID');
-        $pbContact->company_id = $request->get('Company_ID');
+        /*$pbContact->company_id = $request->get('Company_ID');*/
         $pbContact->accessibility = $request->get('Accessibility');
         $pbContact->stage = $request->get('STAGE');
         $pbContact->wevo_server_id = $request->get('wevo_server_id');
