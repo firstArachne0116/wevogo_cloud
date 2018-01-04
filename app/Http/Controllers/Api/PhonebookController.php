@@ -33,11 +33,12 @@ class PhonebookController extends Controller
     public function destroy($id, Request $request)
     {
         $wevoServerId = $request->get('wevo_server_id');
+        $timestamp = $request->get('current_time');
         $pbContact = PbContact::where('contact_id', $id)
             ->where('wevo_server_id', $request->get('wevo_server_id'));
 
         if ($pbContact->delete())
-            $this->createCronLog($wevoServerId . '/' . 'delete_' . $id);
+            $this->createCronLog($wevoServerId . '/' . 'delete_' . $id . '_' . $timestamp);
 
         return response()->json(['result' => 'success'], 200);
     }
@@ -57,7 +58,6 @@ class PhonebookController extends Controller
 
     public function syncAll(Request $request)
     {
-        Log::debug( $request->all());
         $wevoServerId = $request->get('wevo_server_id');
         $contacts = $request->get('contacts');
         PbContact::truncate();
@@ -94,6 +94,7 @@ class PhonebookController extends Controller
     }
     private function savePbContact($contactId, $request, $action)
     {
+        $timestamp = $request->get('current_time');
         $pbContact = PbContact::where('contact_id', $contactId)
             ->where('wevo_server_id', $request->get('wevo_server_id'))->first();
         if ($pbContact === null)
@@ -120,7 +121,7 @@ class PhonebookController extends Controller
             if (!file_exists(public_path('pb_cron_history/' . $pbContact->wevo_server_id)))
                 File::makeDirectory(public_path('pb_cron_history/' . $pbContact->wevo_server_id), $mode = 0777, true, true);
 
-            $this->createCronLog($pbContact->wevo_server_id . '/' . $action . '_' . $pbContact->contact_id);
+            $this->createCronLog($pbContact->wevo_server_id . '/' . $action . '_' . $pbContact->contact_id . '_' . $timestamp);
         }
     }
     private function createCronLog($fileName)
