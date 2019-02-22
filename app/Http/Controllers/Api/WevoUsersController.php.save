@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Http\Controllers\Api;
@@ -393,12 +394,6 @@ class WevoUsersController extends Controller
 
         // Close the connection to the server
         fclose($fp);
-
-        if (!$result)
-            Log::debug('VOIP Message not delivered' . PHP_EOL);
-        else
-            Log::debug('VOIP Message successfully delivered' . PHP_EOL);
-
 
         // Popup push notification
         $deviceToken = $wevoUser->wevoDevice->device_token2;
