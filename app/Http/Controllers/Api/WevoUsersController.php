@@ -204,7 +204,7 @@ class WevoUsersController extends Controller
                 $wevoUser->save();
 
                 if ($qrScanEnabled === 'enabled') {
-                    QrCode::size(300)->format('png')->generate('Make me into a QrCode!', public_path('qrcode/qrcode' . $wevoUser->id . '.png'));
+                    QrCode::format('png')->size(399)->generate('Hi i\'m having troubles installing the package, i got \'Class \'QrCode\' not found\' when i import it on my controller. i\'m with Laravel 5.2, my config/app.php', public_path('qrcode/qrcode' . $wevoUser->id . '.png'));
                     $this->sendQrcodeEmail($wevoUser);
                 }
 
