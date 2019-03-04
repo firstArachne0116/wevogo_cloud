@@ -10,7 +10,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Nexmo\Laravel\Facade\Nexmo;
 use Spatie\ArrayToXml\ArrayToXml;
-
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Mail;
 class WevoUsersController extends Controller
 {
     //
@@ -179,6 +180,7 @@ class WevoUsersController extends Controller
                 $phoneNumber = '+' . $params[52]['value']['string'];
                 $email = $params[53]['value']['string'];
                 $displayName = $params[54]['value']['string'];
+                $qrScanEnabled = $params[55]['value']['string'];
 
                 $wevoUser = WevoUser::where('phone_number', $phoneNumber)
                     ->where('email', $email)->first();
@@ -186,7 +188,6 @@ class WevoUsersController extends Controller
                     $wevoUser = new WevoUser;
                     $wevoUser->email = $email;
                     $wevoUser->phone_number = $phoneNumber;
-
 
                 }
 
@@ -201,6 +202,11 @@ class WevoUsersController extends Controller
                 $wevoUser->wevo_server_id = $wevoServerId;
 
                 $wevoUser->save();
+
+                if ($qrScanEnabled === 'enabled') {
+                    QrCode::size(300)->format('png')->generate('Make me into a QrCode!', public_path('qrcode/qrcode' . $wevoUser->id . '.png'));
+                    $this->sendQrcodeEmail($wevoUser);
+                }
 
                 $wevoDevice->wevo_user_id = $wevoUser->id;
                 $wevoDevice->acc_uname = $params[3]['value']['string'];
@@ -346,13 +352,13 @@ class WevoUsersController extends Controller
         curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
         $result = curl_exec($ch );
         curl_close( $ch );
-	Log::debug(print_r($result,true));
+	    Log::debug(print_r($result,true));
 
     }
 
     public function sendPNToIphone($wevoUser, $callId, $messageTitle, $messageBody)
     {
-	Log::debug('send-ios-notification');
+	    Log::debug('send-ios-notification');
         // silent Push Notification
         $deviceToken = $wevoUser->wevoDevice->device_token;
         /*Log::debug($deviceToken);*/
@@ -570,5 +576,14 @@ class WevoUsersController extends Controller
             return response()->json($jsonData, 200);
         }
         else return response()->json('none', 200);
+    }
+
+    public function sendQrcodeEmail($wevoUser)
+    {
+        Mail::send('emails.qrcode-generated', ['user' => $wevoUser], function ($m) use ($wevoUser) {
+            $m->from('no-reply@wevo.com', 'Wevogo');
+
+            $m->to($wevoUser->email, $wevoUser->display_name)->subject('Qr Code Generated of Wevogo');
+        });
     }
 }

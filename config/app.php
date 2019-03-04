@@ -181,6 +181,7 @@ return [
         XmlResponse\XmlResponseServiceProvider::class,
         XmlMiddleware\XmlRequestServiceProvider::class,
         Nexmo\Laravel\NexmoServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
     ],
 
     /*
@@ -230,7 +231,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Form' => Collective\Html\FormFacade::class,
-        'Nexmo' => \Nexmo\Laravel\Facade\Nexmo::class
+        'Nexmo' => \Nexmo\Laravel\Facade\Nexmo::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
     ],
 
 ];

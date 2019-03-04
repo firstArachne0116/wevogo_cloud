@@ -1,0 +1,1 @@
+<p>Your qrcode is generated</p>
