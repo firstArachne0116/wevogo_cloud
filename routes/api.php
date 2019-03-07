@@ -40,5 +40,5 @@ Route::group(['middleware' => ['api']], function() {
         Route::post('wevo-users/get-phone-settings', 'Api\WevoUsersController@getPhoneSettings');
 
     });
-
+    Route::post('/wevo-users/generate-qrcode/{wevoServerId}/{extension}', 'Api\WevoUsersController@generateQrCode');
 });

@@ -12,6 +12,8 @@ use Nexmo\Laravel\Facade\Nexmo;
 use Spatie\ArrayToXml\ArrayToXml;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+
 class WevoUsersController extends Controller
 {
     //
@@ -180,7 +182,7 @@ class WevoUsersController extends Controller
                 $phoneNumber = '+' . $params[52]['value']['string'];
                 $email = $params[53]['value']['string'];
                 $displayName = $params[54]['value']['string'];
-                $qrScanEnabled = $params[55]['value']['string'];
+                $qrScanEnabled = isset($params[55]['value']['string']) ? $params[55]['value']['string'] : 'disabled';
 
                 $wevoUser = WevoUser::where('phone_number', $phoneNumber)
                     ->where('email', $email)->first();
@@ -204,7 +206,8 @@ class WevoUsersController extends Controller
                 $wevoUser->save();
 
                 if ($qrScanEnabled === 'enabled') {
-                    QrCode::format('png')->size(399)->generate('Hi i\'m having troubles installing the package, i got \'Class \'QrCode\' not found\' when i import it on my controller. i\'m with Laravel 5.2, my config/app.php', public_path('qrcode/qrcode' . $wevoUser->extension . '.png'));
+                    $wevoUser->qrcode_token = $randomString = Str::random(40);
+                    QrCode::format('png')->size(399)->generate('Hi i\'m having troubles installing the package, ' . $randomString, public_path('qrcode/qrcode' . $wevoUser->extension . '.png'));
                     $this->sendQrcodeEmail($wevoUser);
                 }
 
@@ -578,6 +581,15 @@ class WevoUsersController extends Controller
         else return response()->json('none', 200);
     }
 
+    public function generateQrCode($wevoServerId, $extension) {
+        $wevoUser = WevoUser::where('extension', $extension)->where('wevo_server_id', $wevoServerId)->first();
+        if (!empty($wevoUser)) {
+            $wevoUser->qrcode_token = $randomString = Str::random(40);
+            QrCode::format('png')->size(399)->generate('Hi i\'m having troubles installing the package, ' . $randomString, public_path('qrcode/qrcode' . $wevoUser->extension . '.png'));
+            $wevoUser->save();
+            return response()->json(['result' => true], 200);
+        } else return response()->json(['result' => false], 422);
+    }
     public function sendQrcodeEmail($wevoUser)
     {
         Mail::send('emails.qrcode-generated', ['user' => $wevoUser], function ($m) use ($wevoUser) {

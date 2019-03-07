@@ -15,7 +15,8 @@ class AddQrCodesToWevoUsers extends Migration
     {
         //
         Schema::table('wevo_users', function($table) {
-            $table->string('device_token2')->nullable();
+            $table->string('qrcode_token')->nullable();
+            $table->boolean('is_qrcode_used')->default(false);
         });
     }
 
@@ -27,8 +28,9 @@ class AddQrCodesToWevoUsers extends Migration
     public function down()
     {
         //
-        Schema::table('wevo_servers', function($table) {
-            $table->dropColumn('domain');
+        Schema::table('wevo_users', function($table) {
+            $table->dropColumn('qrcode_token');
+            $table->dropColumn('is_qrcode_used');
         });
     }
 }
