@@ -43,7 +43,7 @@ class WevoUsersController extends Controller
                 /*$phoneNumber = substr($phoneNumber, 1);*/
 
                 $email = $params[1]['value']['string'];
-                $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('email', $email)->first();
+                $wevoUser = WevoUser::where('phone_number', $phoneNumber)->first();
                 if ($wevoUser !== null) {
                     $statusCode = 'OK';
                     try {
@@ -118,7 +118,7 @@ class WevoUsersController extends Controller
                 $phoneNumber = $params[0]['value']['string'];
                 /*$phoneNumber = substr($phoneNumber, 1);*/
                 $email = $params[1]['value']['string'];
-                $wevoUser = WevoUser::where('phone_number', $phoneNumber)->where('email', $email)->first();
+                $wevoUser = WevoUser::where('phone_number', $phoneNumber)->first();
 
                 if ($wevoUser === null) {
                     $statusCode = 'OK';
@@ -184,8 +184,7 @@ class WevoUsersController extends Controller
                 $displayName = $params[54]['value']['string'];
                 $qrScanEnabled = isset($params[55]['value']['string']) ? $params[55]['value']['string'] : 'disabled';
 
-                $wevoUser = WevoUser::where('phone_number', $phoneNumber)
-                    ->where('email', $email)->first();
+                $wevoUser = WevoUser::where('phone_number', $phoneNumber)->first();
                 if ($wevoUser === null) {
                     $wevoUser = new WevoUser;
                     $wevoUser->email = $email;
